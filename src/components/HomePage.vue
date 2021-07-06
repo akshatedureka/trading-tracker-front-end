@@ -12,7 +12,7 @@
 
       <v-col class="mb-4">
         <h1 class="display-2 font-weight-bold mb-3">
-          Free Manufacturing Execution System
+          Trading Tracker
         </h1>
 
         <p class="subheading font-weight-regular">
@@ -50,16 +50,12 @@
     data: () => ({
       links: [
         {
-          text: 'Create Part',
-          to: '/create-part',
+          text: 'Price Ladder',
+          to: '/price-ladder',
         },
         {
-          text: 'Search Part',
-          to: '/search-part',
-        },
-        {
-          text: 'Transfer History (Coming soon...)',
-          to: '/',
+          text: 'Order Blocks',
+          to: '/order-blocks',
         },
       ],
     }),
