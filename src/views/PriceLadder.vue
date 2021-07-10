@@ -41,6 +41,7 @@
               :headers="headersNew"
               :items="ladderNew"
               item-key="index"
+              :sort-by="['buyPrice']"
               :loading="dataLoading"
               loading-text="Loading... Please wait"
             >
@@ -104,6 +105,11 @@ export default {
       var blockArray = [];
       var buyPrice = 0.0;
       var sellPrice = 0.0;
+      var offset = 1;
+
+      if(this.numBlocks % 2) {
+        offset = 0;
+      }
 
       // Calculate range up
       for (let i = 0; i < this.numBlocks / 2; i++) {
@@ -117,9 +123,9 @@ export default {
       }
 
       // Calulate range down
-      for (let i = 1; i < this.numBlocks / 2; i++) {
+      for (let i = 1; i < (this.numBlocks / 2) + offset; i++) {
         buyPrice = parseFloat(this.newStartPrice) - i * this.buyPercentage;
-        sellPrice = buyPrice - buyPrice * (this.sellPercentage / 100);
+        sellPrice = buyPrice + buyPrice * (this.sellPercentage / 100);
         var ladderItemDown = {
           buyPrice: buyPrice.toFixed(2),
           sellPrice: sellPrice.toFixed(2),
