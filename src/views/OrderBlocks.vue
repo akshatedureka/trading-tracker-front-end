@@ -1,8 +1,8 @@
 <template>
   <div>
-    <v-container class="grey lighten-5 mb-6">
-      <v-row no-gutters>
-        <v-col>
+    <v-container>
+      <v-row>
+        <!--         <v-col>
           <v-data-table
             :headers="headers"
             :items="ladder"
@@ -11,76 +11,78 @@
             loading-text="Loading... Please wait"
           >
           </v-data-table>
-        </v-col>
+        </v-col> -->
         <v-col>
           <!--           <v-btn elevation="2" color="primary" @click="createInitialBlocks"
             >Populate Blocks</v-btn
           > -->
-          <v-data-table
-            :headers="headersBlocks"
-            :items="blocks"
-            item-key="index"
-            :item-class="itemRowBackground"
-            :loading="dataLoading"
-            loading-text="Loading... Please wait"
-          >
-            <template v-slot:item.buyOrderCreated="{ item }">
-              <v-simple-checkbox
-                v-model="item.buyOrderCreated"
-                @click="buyOrderCreated(item.blockId, item.buyOrderCreated)"
-              ></v-simple-checkbox>
-            </template>
-            <template v-slot:item.executedBuyPrice="props">
-              <v-edit-dialog
-                :return-value.sync="props.item.executedBuyPrice"
-                large
-                persistent
-                @save="
-                  buyOrderExecuted(
-                    props.item.blockId,
-                    props.item.executedBuyPrice
-                  )
-                "
-                @cancel="cancel"
-                @open="open"
-                @close="close"
-              >
-                <div>{{ props.item.executedBuyPrice }}</div>
-                <template v-slot:input>
-                  <div class="mt-4 text-h6">Update Executed Buy Price</div>
-                  <v-text-field
-                    v-model="props.item.executedBuyPrice"
-                    :rules="[max25chars]"
-                    label="Edit"
-                    single-line
-                    counter
-                    autofocus
-                  ></v-text-field>
-                </template>
-              </v-edit-dialog>
-            </template>
-            <template v-slot:item.buyOrderExecuted="{ item }">
-              <v-simple-checkbox
-                v-model="item.buyOrderExecuted"
-              ></v-simple-checkbox>
-            </template>
-            <template v-slot:item.sellOrderCreated="{ item }">
-              <v-simple-checkbox
-                v-model="item.sellOrderCreated"
-                @click="sellOrderCreated(item.blockId, item.sellOrderCreated)"
-              ></v-simple-checkbox>
-            </template>
-            <template v-slot:item.sellOrderExecuted="{ item }">
-              <v-simple-checkbox
-                v-model="item.sellOrderExecuted"
-              ></v-simple-checkbox>
-            </template>
-            <!--             <template v-slot:item="{ item }">
+          <v-card>
+            <v-data-table
+              :headers="headersBlocks"
+              :items="blocks"
+              item-key="index"
+              :item-class="itemRowBackground"
+              :loading="dataLoading"
+              loading-text="Loading... Please wait"
+            >
+              <template v-slot:item.buyOrderCreated="{ item }">
+                <v-simple-checkbox
+                  v-model="item.buyOrderCreated"
+                  @click="buyOrderCreated(item.blockId, item.buyOrderCreated)"
+                ></v-simple-checkbox>
+              </template>
+              <template v-slot:item.executedBuyPrice="props">
+                <v-edit-dialog
+                  :return-value.sync="props.item.executedBuyPrice"
+                  large
+                  persistent
+                  @save="
+                    buyOrderExecuted(
+                      props.item.blockId,
+                      props.item.executedBuyPrice
+                    )
+                  "
+                  @cancel="cancel"
+                  @open="open"
+                  @close="close"
+                >
+                  <div>{{ props.item.executedBuyPrice }}</div>
+                  <template v-slot:input>
+                    <div class="mt-4 text-h6">Update Executed Buy Price</div>
+                    <v-text-field
+                      v-model="props.item.executedBuyPrice"
+                      :rules="[max25chars]"
+                      label="Edit"
+                      single-line
+                      counter
+                      autofocus
+                    ></v-text-field>
+                  </template>
+                </v-edit-dialog>
+              </template>
+              <template v-slot:item.buyOrderExecuted="{ item }">
+                <v-simple-checkbox
+                  v-model="item.buyOrderExecuted"
+                ></v-simple-checkbox>
+              </template>
+              <template v-slot:item.sellOrderCreated="{ item }">
+                <v-simple-checkbox
+                  v-model="item.sellOrderCreated"
+                  @click="sellOrderCreated(item.blockId, item.sellOrderCreated)"
+                ></v-simple-checkbox>
+              </template>
+              <template v-slot:item.sellOrderExecuted="{ item }">
+                <v-simple-checkbox
+                  v-model="item.sellOrderExecuted"
+                ></v-simple-checkbox>
+              </template>
+              <!--             <template v-slot:item="{ item }">
               <tr :class="'cyan'">
                 <td> {{item.buyOrderCreated}} </td>
               </tr>
                </template> -->
-          </v-data-table>
+            </v-data-table>
+          </v-card>
         </v-col>
       </v-row>
       <v-snackbar v-model="snack" :timeout="3000" :color="snackColor">

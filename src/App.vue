@@ -29,10 +29,8 @@
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
-    <v-main>
-      <v-container fluid>
+    <v-main class="grey lighten-3">
         <router-view></router-view>
-      </v-container>
     </v-main>
   </v-app>
 </template>
