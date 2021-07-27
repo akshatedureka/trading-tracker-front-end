@@ -6,6 +6,8 @@
           <v-form class="mr-5">
             <v-card class="pa-5">
               <v-card-title> Inputs </v-card-title>
+              <v-text-field label="Symbol" v-model="symbol">
+              </v-text-field>
               <v-text-field label="Starting price" v-model="newStartPrice">
               </v-text-field>
               <v-text-field label="Number of blocks" v-model="numBlocks">
@@ -67,8 +69,9 @@ export default {
   data() {
     return {
       response: "",
+      saveLadderResponse: "",
       ladderCurrent: [],
-      blockArray: [],
+      symbol: "",
       newStartPrice: 0.0,
       numBlocks: 10,
       buyPercentage: 0.0,
@@ -113,7 +116,7 @@ export default {
 
       // Calculate range up
       for (let i = 0; i < this.numBlocks / 2; i++) {
-        buyPrice = parseFloat(this.newStartPrice) + i * this.buyPercentage;
+        buyPrice = parseFloat(this.newStartPrice) + (i * (this.buyPercentage / 100) * parseFloat(this.newStartPrice));
         sellPrice = buyPrice + buyPrice * (this.sellPercentage / 100);
         var ladderItemUp = {
           buyPrice: buyPrice.toFixed(2),
@@ -124,7 +127,7 @@ export default {
 
       // Calulate range down
       for (let i = 1; i < (this.numBlocks / 2) + offset; i++) {
-        buyPrice = parseFloat(this.newStartPrice) - i * this.buyPercentage;
+        buyPrice = parseFloat(this.newStartPrice) - (i * (this.buyPercentage / 100) * parseFloat(this.newStartPrice));
         sellPrice = buyPrice + buyPrice * (this.sellPercentage / 100);
         var ladderItemDown = {
           buyPrice: buyPrice.toFixed(2),
@@ -165,8 +168,14 @@ export default {
           this.snack = true;
         });
     },
-    saveLader() {
-
+    saveLadder() {
+          axios
+          .post("http://localhost:8080/api/ladders", {
+            symbol: this.symbol,
+            ladderPrices: this.ladderNew,
+          })
+          .then((response) => (this.saveLadderResponse = response.data));
+      //JSON.parse(JSON.stringify(this.ladderNew))
     },
   },
 };
