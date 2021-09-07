@@ -28,6 +28,14 @@ const routes = [
     // which is lazy-loaded when the route is visited.
     component: () => import(/* webpackChunkName: "create-part" */ '../views/OrderBlocks.vue')
   },
+  {
+    path: '/symbol-maintenance',
+    name: 'SymbolMaintenance',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () => import(/* webpackChunkName: "create-part" */ '../views/SymbolMaintenance.vue')
+  },
 ]
 
 const router = new VueRouter({

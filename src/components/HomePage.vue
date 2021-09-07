@@ -57,6 +57,10 @@
           text: 'Order Blocks',
           to: '/order-blocks',
         },
+        {
+          text: 'Symbol Maintenance',
+          to: '/symbol-maintenance',
+        },
       ],
     }),
   }
