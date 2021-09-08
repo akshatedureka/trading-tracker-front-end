@@ -123,6 +123,7 @@ export default {
       response: "",
       addSymbolResponse: "",
       switchTradeResponse: "",
+      updateSymbolResponse: "",
       search: "",
       dialog: false,
       dialogDelete: false,
@@ -160,9 +161,12 @@ export default {
     headers() {
       return [
         { text: "Name", value: "name" },
-        { text: "Active", value: "active" },
+        { text: "Current Qty", value: "currentQuantity", sortable: false },
+        { text: "Current Profit", value: "currentProfit", sortable: false },
+        { text: "Archive Profit", value: "archiveProfit", sortable: false },
         { text: "Trade", value: "trading", sortable: false },
         { text: "Actions", value: "actions", sortable: false },
+        { text: "Active", value: "active" },
       ];
     },
     formTitle() {
@@ -196,7 +200,7 @@ export default {
                     active: item.active,
                     trading: item.trading,
                   })
-                  .then((response) => (this.addSymbolResponse = response.data))
+                  .then((response) => (this.updateSymbolResponse = response.data))
                   .catch((err) => {
                     this.snackColor = "error";
                     this.snackText = "Error while editing symbol. " + err;
@@ -217,7 +221,31 @@ export default {
             this.snack = true;
           });
       } else {
-        // ToDo: turn off trading
+        axios
+          .post("http://localhost:5860/api/CloseOpenPosition", null, {
+            params: { symbol },
+          })
+          .then((response) => {
+            this.addSymbolResponse = response.data;
+            axios
+              .post("http://localhost:8080/api/UpdateTradingSymbol", {
+                id: item.id,
+                name: item.name,
+                active: item.active,
+                trading: item.trading,
+              })
+              .then((response) => (this.updateSymbolResponse = response.data))
+              .catch((err) => {
+                this.snackColor = "error";
+                this.snackText = "Error while editing symbol. " + err;
+                this.snack = true;
+              });
+          })
+          .catch((err) => {
+            this.snackColor = "error";
+            this.snackText = "Error while closing open position. " + err;
+            this.snack = true;
+          });
       }
     },
     editItem(item) {

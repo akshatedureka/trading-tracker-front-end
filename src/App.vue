@@ -33,6 +33,12 @@
           </v-list-item-icon>
           <v-list-item-title>Symbol Maintenance</v-list-item-title>
         </v-list-item>
+        <v-list-item color="primary" to="/block-archive">
+          <v-list-item-icon>
+            <v-icon>mdi-layers-triple</v-icon>
+          </v-list-item-icon>
+          <v-list-item-title>Block Archive</v-list-item-title>
+        </v-list-item>
       </v-list>
     </v-navigation-drawer>
     <v-main class="grey lighten-3">

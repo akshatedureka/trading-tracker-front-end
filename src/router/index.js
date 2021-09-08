@@ -18,7 +18,7 @@ const routes = [
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "create-part" */ '../views/PriceLadder.vue')
+    component: () => import(/* webpackChunkName: "price-ladder" */ '../views/PriceLadder.vue')
   },
   {
     path: '/order-blocks',
@@ -26,7 +26,7 @@ const routes = [
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "create-part" */ '../views/OrderBlocks.vue')
+    component: () => import(/* webpackChunkName: "order-blocks" */ '../views/OrderBlocks.vue')
   },
   {
     path: '/symbol-maintenance',
@@ -34,7 +34,15 @@ const routes = [
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "create-part" */ '../views/SymbolMaintenance.vue')
+    component: () => import(/* webpackChunkName: "symbol-maintenance" */ '../views/SymbolMaintenance.vue')
+  },
+  {
+    path: '/block-archive',
+    name: 'BlockArchive',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () => import(/* webpackChunkName: "block-archive" */ '../views/BlockArchive.vue')
   },
 ]
 
