@@ -27,11 +27,17 @@
           </v-list-item-icon>
           <v-list-item-title>Order Blocks</v-list-item-title>
         </v-list-item>
-        <v-list-item color="primary" to="/symbol-maintenance">
+        <v-list-item color="primary" to="/symbol-management">
           <v-list-item-icon>
             <v-icon>mdi-layers-triple</v-icon>
           </v-list-item-icon>
-          <v-list-item-title>Symbol Maintenance</v-list-item-title>
+          <v-list-item-title>Symbol Management</v-list-item-title>
+        </v-list-item>
+        <v-list-item color="primary" to="/trade-management">
+          <v-list-item-icon>
+            <v-icon>mdi-layers-triple</v-icon>
+          </v-list-item-icon>
+          <v-list-item-title>Trade Management</v-list-item-title>
         </v-list-item>
         <v-list-item color="primary" to="/block-archive">
           <v-list-item-icon>

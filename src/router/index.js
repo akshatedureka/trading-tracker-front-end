@@ -29,12 +29,20 @@ const routes = [
     component: () => import(/* webpackChunkName: "order-blocks" */ '../views/OrderBlocks.vue')
   },
   {
-    path: '/symbol-maintenance',
-    name: 'SymbolMaintenance',
+    path: '/symbol-management',
+    name: 'SymbolManagement',
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "symbol-maintenance" */ '../views/SymbolMaintenance.vue')
+    component: () => import(/* webpackChunkName: "symbol-management" */ '../views/SymbolManagement.vue')
+  },
+  {
+    path: '/trade-management',
+    name: 'TradeManagement',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () => import(/* webpackChunkName: "trade-management" */ '../views/TradeManagement.vue')
   },
   {
     path: '/block-archive',

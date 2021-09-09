@@ -10,7 +10,7 @@
       >
         <template v-slot:top>
           <v-toolbar flat>
-            <v-toolbar-title>Symbols</v-toolbar-title>
+            <v-toolbar-title>Symbol Management</v-toolbar-title>
             <v-divider class="mx-4" inset vertical></v-divider>
             <v-spacer></v-spacer>
             <v-dialog v-model="dialog" max-width="500px">
@@ -80,14 +80,6 @@
         <template v-slot:item.active="{ item }">
           <v-simple-checkbox v-model="item.active" disabled></v-simple-checkbox>
         </template>
-        <template v-slot:item.trading="{ item }">
-          <v-switch
-            v-model="item.trading"
-            inset
-            :label="`${item.trading.toString()}`"
-            @click="switchTrading(item)"
-          ></v-switch>
-        </template>
         <template v-slot:item.actions="{ item }">
           <v-icon small class="mr-2" @click="editItem(item)">
             mdi-pencil
@@ -112,17 +104,13 @@
 import axios from "axios";
 
 export default {
-  name: "SymbolMaintenance",
-  props: {
-    msg: String,
-  },
+  name: "SymbolManagement",
   data() {
     return {
       dataLoading: true,
       symbols: [],
       response: "",
       addSymbolResponse: "",
-      switchTradeResponse: "",
       updateSymbolResponse: "",
       search: "",
       dialog: false,
@@ -161,12 +149,8 @@ export default {
     headers() {
       return [
         { text: "Name", value: "name" },
-        { text: "Current Qty", value: "currentQuantity", sortable: false },
-        { text: "Current Profit", value: "currentProfit", sortable: false },
-        { text: "Archive Profit", value: "archiveProfit", sortable: false },
-        { text: "Trade", value: "trading", sortable: false },
-        { text: "Actions", value: "actions", sortable: false },
         { text: "Active", value: "active" },
+        { text: "Actions", value: "actions", sortable: false },
       ];
     },
     formTitle() {
@@ -174,80 +158,6 @@ export default {
     },
   },
   methods: {
-    switchTrading(item) {
-      if (item.trading) {
-        var symbol = item.name;
-        axios
-          .post("http://localhost:8080/api/CreateBlocksFromSymbol", null, {
-            params: { symbol },
-          })
-          .then((response) => {
-            this.switchTradeResponse = response.data;
-            axios
-              .post(
-                "http://localhost:8080/api/CreateInitialBuyOrdersFromSymbol",
-                null,
-                {
-                  params: { symbol },
-                }
-              )
-              .then((response) => {
-                this.switchTradeResponse = response.data;
-                axios
-                  .post("http://localhost:8080/api/UpdateTradingSymbol", {
-                    id: item.id,
-                    name: item.name,
-                    active: item.active,
-                    trading: item.trading,
-                  })
-                  .then((response) => (this.updateSymbolResponse = response.data))
-                  .catch((err) => {
-                    this.snackColor = "error";
-                    this.snackText = "Error while editing symbol. " + err;
-                    this.snack = true;
-                  });
-              })
-              .catch((err) => {
-                this.snackColor = "error";
-                this.snackText =
-                  "Error while creating initial buy orders for symbol. " + err;
-                this.snack = true;
-              });
-          })
-          .catch((err) => {
-            this.snackColor = "error";
-            this.snackText =
-              "Error while creating creating blocks for symbol. " + err;
-            this.snack = true;
-          });
-      } else {
-        axios
-          .post("http://localhost:5860/api/CloseOpenPosition", null, {
-            params: { symbol },
-          })
-          .then((response) => {
-            this.addSymbolResponse = response.data;
-            axios
-              .post("http://localhost:8080/api/UpdateTradingSymbol", {
-                id: item.id,
-                name: item.name,
-                active: item.active,
-                trading: item.trading,
-              })
-              .then((response) => (this.updateSymbolResponse = response.data))
-              .catch((err) => {
-                this.snackColor = "error";
-                this.snackText = "Error while editing symbol. " + err;
-                this.snack = true;
-              });
-          })
-          .catch((err) => {
-            this.snackColor = "error";
-            this.snackText = "Error while closing open position. " + err;
-            this.snack = true;
-          });
-      }
-    },
     editItem(item) {
       this.editedIndex = this.symbols.indexOf(item);
       this.editedItem = Object.assign({}, item);
