@@ -3,7 +3,7 @@
     <v-container>
       <v-data-table
         :headers="headers"
-        :items="symbols"
+        :items="tradingData"
         :loading="dataLoading"
         loading-text="Loading... Please wait"
         class="elevation-1"
@@ -15,16 +15,17 @@
             <v-spacer></v-spacer>
           </v-toolbar>
         </template>
-        <template v-slot:item.name="{ item }">
+        <template v-slot:item.symbol="{ item }">
           <v-chip :color="getColor(item.totalProfit)" dark>
-            {{ item.name }}
+            {{ item.symbol }}
           </v-chip>
         </template>
         <template v-slot:item.trading="{ item }">
           <v-switch
             v-model="item.trading"
             inset
-            :label="`${item.trading.toString()}`"
+            :label="getSwitchLabel(item.trading)"
+
             @click="switchTrading(item)"
           ></v-switch>
         </template>
@@ -53,7 +54,7 @@ export default {
   data() {
     return {
       dataLoading: true,
-      symbols: [],
+      tradingData: [],
       response: "",
       switchTradeResponse: "",
       search: "",
@@ -72,26 +73,19 @@ export default {
   },
   mounted() {
     axios.get("http://localhost:8080/api/GetTradingData").then((response) => {
-      this.symbols = response.data;
+      this.tradingData = response.data;
       this.dataLoading = false;
     });
   },
   computed: {
     headers() {
       return [
-        { text: "Name", value: "name" },
-        { text: "Trading", value: "trading", sortable: false },
-        { text: "Current Qty", value: "currentQuantity", sortable: false },
-        {
-          text: "Open Position Profit",
-          value: "currentProfit",
-          sortable: false,
-        },
-        {
-          text: "Closed Position Profit",
-          value: "archiveProfit",
-          sortable: false,
-        },
+        { text: "SymbolId", value: "symbolId" },
+        { text: "Symbol", value: "symbol" },
+        { text: "Trading", value: "trading" },
+        { text: "Current Qty", value: "currentQuantity" },
+        { text: "Open Position Profit", value: "currentProfit" },
+        { text: "Closed Position Profit", value: "archiveProfit" },
         { text: "Total Day Profit", value: "totalProfit" },
       ];
     },
@@ -102,9 +96,13 @@ export default {
       else if (profit > 0) return "green";
       else return "red";
     },
+    getSwitchLabel(trading) {
+      if (trading) return "On";
+      else return "Off";
+    },
     switchTrading(item) {
+      var symbol = item.symbol;
       if (item.trading) {
-        var symbol = item.name;
         axios
           .post("http://localhost:8080/api/CreateBlocksFromSymbol", null, {
             params: { symbol },
@@ -123,9 +121,8 @@ export default {
                 this.switchTradeResponse = response.data;
                 axios
                   .post("http://localhost:8080/api/UpdateTradingSymbol", {
-                    id: item.id,
-                    name: item.name,
-                    active: item.active,
+                    id: item.symbolId,
+                    name: item.symbol,
                     trading: item.trading,
                   })
                   .then(
@@ -152,16 +149,15 @@ export default {
           });
       } else {
         axios
-          .post("http://localhost:5860/api/CloseOpenPosition", null, {
+          .post("http://localhost:8080/api/CloseOpenPosition", null, {
             params: { symbol },
           })
           .then((response) => {
-            this.addSymbolResponse = response.data;
+            this.switchTradeResponse = response.data;
             axios
               .post("http://localhost:8080/api/UpdateTradingSymbol", {
-                id: item.id,
-                name: item.name,
-                active: item.active,
+                id: item.symbolId,
+                name: item.symbol,
                 trading: item.trading,
               })
               .then((response) => (this.updateSymbolResponse = response.data))
