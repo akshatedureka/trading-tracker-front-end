@@ -80,7 +80,6 @@ export default {
   computed: {
     headers() {
       return [
-        { text: "SymbolId", value: "symbolId" },
         { text: "Symbol", value: "symbol" },
         { text: "Trading", value: "trading" },
         { text: "Current Qty", value: "currentQuantity" },

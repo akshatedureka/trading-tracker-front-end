@@ -1,6 +1,9 @@
 <template>
   <div>
     <v-container>
+      <v-overlay :value="overlay">
+        <v-progress-circular indeterminate size="64"></v-progress-circular>
+      </v-overlay>
       <v-data-table
         :headers="headers"
         :items="symbols"
@@ -37,6 +40,7 @@
                         <v-text-field
                           v-model="editedItem.name"
                           label="Name"
+                          ref="symbolName"
                         ></v-text-field>
                       </v-col>
                       <v-col cols="12" sm="6" md="4">
@@ -58,10 +62,11 @@
                 </v-card-actions>
               </v-card>
             </v-dialog>
-            <v-dialog v-model="dialogDelete" max-width="500px">
+            <v-dialog v-model="dialogDelete" max-width="650px">
               <v-card>
                 <v-card-title class="headline"
-                  >Are you sure you want to delete this item?</v-card-title
+                  >Are you sure you want to delete symbol
+                  {{ editedItem.name }}?</v-card-title
                 >
                 <v-card-actions>
                   <v-spacer></v-spacer>
@@ -90,7 +95,7 @@
           <!-- <v-btn color="primary" @click="initialize"> Reset </v-btn> -->
         </template>
       </v-data-table>
-      <v-snackbar v-model="snack" :timeout="3000" :color="snackColor">
+      <v-snackbar v-model="snack" :timeout="8000" :color="snackColor">
         {{ snackText }}
         <template v-slot:action="{ attrs }">
           <v-btn v-bind="attrs" text @click="snack = false"> Close </v-btn>
@@ -108,10 +113,9 @@ export default {
   data() {
     return {
       dataLoading: true,
+      overlay: false,
       symbols: [],
       response: "",
-      addSymbolResponse: "",
-      updateSymbolResponse: "",
       search: "",
       dialog: false,
       dialogDelete: false,
@@ -129,14 +133,6 @@ export default {
       snackText: "",
     };
   },
-  watch: {
-    dialog(val) {
-      val || this.close();
-    },
-    dialogDelete(val) {
-      val || this.closeDelete();
-    },
-  },
   mounted() {
     axios
       .get("http://localhost:8080/api/GetTradingSymbols")
@@ -144,6 +140,22 @@ export default {
         this.symbols = response.data;
         this.dataLoading = false;
       });
+  },
+  watch: {
+    dialog(val) {
+      val || this.close();
+      if (this.editedIndex < 0) {
+        this.editedItem.active = true; // default active to true for new symbol creation dialog
+        if (val) {
+          setTimeout(() => {
+            this.$refs.symbolName.focus();
+          });
+        }
+      }
+    },
+    dialogDelete(val) {
+      val || this.closeDelete();
+    },
   },
   computed: {
     headers() {
@@ -169,13 +181,31 @@ export default {
       this.dialogDelete = true;
     },
     deleteItemConfirm() {
-      this.symbols.splice(this.editedIndex, 1); // ToDo: Update this to remove from array after successful response
+      this.overlay = true;
+      var symbolName = this.editedItem.name;
+      var symbolId = this.editedItem.id;
+      var symbolIndex = this.editedIndex;
       axios
-        .delete(
-          "https://gatewayweb20210323144005.azurewebsites.net/rfidservice/deletereader/" +
-            this.editedItem.id
-        )
-        .then((response) => (this.addSymbolResponse = response.data));
+        .delete("http://localhost:8080/api/DeleteTradingSymbol", {
+          data: {
+            id: symbolId,
+            name: symbolName,
+          },
+        })
+        .then((response) => {
+          this.response = response.data;
+          this.symbols.splice(symbolIndex, 1);
+          this.displaySnack(
+            "success",
+            "Successfully deleted symbol " + symbolName + "."
+          );
+        })
+        .catch((err) => {
+          this.displaySnack(
+            "error",
+            "Error while deleting symbol " + symbolName + ". " + err
+          );
+        });
       this.closeDelete();
     },
     close() {
@@ -193,35 +223,59 @@ export default {
       });
     },
     save() {
+      this.overlay = true;
+      var symbolIndex = this.editedIndex;
+      var newSymbol = this.editedItem;
+      var symbol = this.editedItem.name;
       if (this.editedIndex > -1) {
-        Object.assign(this.symbols[this.editedIndex], this.editedItem);
+        // edit
         axios
           .post("http://localhost:8080/api/UpdateTradingSymbol", {
             id: this.editedItem.id,
+            oldName: this.symbols[symbolIndex].name,
             name: this.editedItem.name,
             active: this.editedItem.active,
           })
-          .then((response) => (this.addSymbolResponse = response.data))
+          .then((response) => {
+            this.response = response.data;
+            Object.assign(this.symbols[symbolIndex], newSymbol);
+            this.displaySnack(
+              "success",
+              "Successfully updated symbol " + newSymbol.name + "."
+            );
+          })
           .catch((err) => {
-            this.snackColor = "error";
-            this.snackText = "Error while editing symbol. " + err;
-            this.snack = true;
+            this.displaySnack("error", "Error while editing symbol. " + err);
           });
       } else {
-        this.symbols.push(this.editedItem); // ToDo: Update this to add to array after response
-        var symbol = this.editedItem.name;
+        // create new
         axios
           .post("http://localhost:8080/api/CreateTradingSymbol", null, {
             params: { symbol },
           })
-          .then((response) => (this.addSymbolResponse = response.data))
+          .then((response) => {
+            this.response = response.data;
+            newSymbol.id = this.response.id;
+            this.symbols.push(newSymbol);
+            this.displaySnack(
+              "success",
+              "Successfully added symbol " + newSymbol.name + "."
+            );
+          })
           .catch((err) => {
-            this.snackColor = "error";
-            this.snackText = "Error while creating new symbol. " + err;
-            this.snack = true;
+            this.displaySnack(
+              "error",
+              "Error while creating new symbol. " + err
+            );
           });
       }
       this.close();
+    },
+    displaySnack(color, text) {
+      this.snackColor = color;
+      this.snackText = text;
+      this.snack = true;
+      this.overlay = false;
     },
   },
 };
