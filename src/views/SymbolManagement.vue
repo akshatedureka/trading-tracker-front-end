@@ -139,6 +139,9 @@ export default {
       .then((response) => {
         this.symbols = response.data;
         this.dataLoading = false;
+      })
+      .catch((err) => {
+        this.displaySnack("error", "Error while getting symbols. " + err);
       });
   },
   watch: {
