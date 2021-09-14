@@ -40,7 +40,7 @@
                       <v-col cols="12" sm="3" md="3">
                         <v-select
                           v-model="editedItem.symbol"
-                          :items="symbols"
+                          :items="availableSymbols"
                           item-text="name"
                           item-value="name"
                           label="Symbol"
@@ -81,8 +81,8 @@
             <v-dialog v-model="dialogDelete" max-width="650px">
               <v-card>
                 <v-card-title class="headline"
-                  >Are you sure you want to delete symbol
-                  {{ editedItem.name }}?</v-card-title
+                  >Are you sure you want to delete ladder
+                  {{ editedItem.symbol }}?</v-card-title
                 >
                 <v-card-actions>
                   <v-spacer></v-spacer>
@@ -108,7 +108,7 @@
           <v-tooltip bottom>
             <template v-slot:activator="{ on, attrs }">
               <v-btn
-                v-if="!item.blocksCreated"
+                :disabled="item.blocksCreated"
                 color="success"
                 fab
                 x-small
@@ -127,7 +127,7 @@
           <v-tooltip bottom>
             <template v-slot:activator="{ on, attrs }">
               <v-btn
-                v-if="item.blocksCreated"
+                :disabled="!item.blocksCreated"
                 color="error"
                 fab
                 x-small
@@ -146,7 +146,7 @@
           <v-tooltip bottom>
             <template v-slot:activator="{ on, attrs }">
               <v-btn
-                v-if="item.blocksCreated"
+                :disabled="!item.blocksCreated"
                 color="info"
                 fab
                 x-small
@@ -154,7 +154,7 @@
                 @click="
                   $router.push({
                     name: 'BlockDetails',
-                    params: { symbol: 'CRCT' },
+                    params: { symbol: item.symbol },
                   })
                 "
                 v-bind="attrs"
@@ -163,7 +163,7 @@
                 <v-icon>mdi-layers</v-icon>
               </v-btn>
             </template>
-            <span>Delete Blocks</span>
+            <span>View Blocks</span>
           </v-tooltip>
         </template>
         <template v-slot:no-data>
@@ -261,12 +261,17 @@ export default {
       ];
     },
     formTitle() {
-      return this.editedIndex === -1 ? "New Item" : "Edit Item";
+      return this.editedIndex === -1 ? "New Ladder" : "Edit Ladder";
+    },
+    availableSymbols() {
+      return this.symbols.filter(
+        (ar) => !this.ladders.find((rm) => rm.symbol === ar.name)
+      );
     },
   },
   methods: {
     editItem(item) {
-      this.editedIndex = this.symbols.indexOf(item);
+      this.editedIndex = this.ladders.indexOf(item);
       this.editedItem = Object.assign({}, item);
       this.dialog = true;
     },
@@ -277,28 +282,28 @@ export default {
     },
     deleteItemConfirm() {
       this.overlay = true;
-      var symbolName = this.editedItem.symbol;
-      var ladderId = this.editedItem.id;
       var ladderIndex = this.editedIndex;
       axios
         .delete("http://localhost:8080/api/DeleteLadder", {
           data: {
-            id: ladderId,
-            symbol: symbolName,
+            id: this.editedItem.id,
+            symbol: this.editedItem.symbol,
           },
         })
         .then((response) => {
-          this.response = response.data;
+          var deletedLadder = response.data;
           this.ladders.splice(ladderIndex, 1);
           this.displaySnack(
             "success",
-            "Successfully deleted ladder for symbol " + symbolName + "."
+            "Successfully deleted ladder for symbol " +
+              deletedLadder.symbol +
+              "."
           );
         })
         .catch((err) => {
           this.displaySnack(
             "error",
-            "Error while deleting ladder for symbol " + symbolName + ". " + err
+            "Error while deleting ladder for symbol:" + err
           );
         });
       this.closeDelete();
@@ -320,54 +325,49 @@ export default {
     save() {
       this.overlay = true;
       var ladderIndex = this.editedIndex;
-      var newLadder = this.editedItem;
-      var symbol = this.editedItem.symbol;
-      var initialNumShares = this.editedItem.initialNumShares;
-      var buyPercentage = this.editedItem.buyPercentage;
-      var sellPercentage = this.editedItem.sellPercentage;
 
       if (this.editedIndex > -1) {
         // edit
-        /*         axios
-          .post("http://localhost:8080/api/UpdateTradingSymbol", {
+        axios
+          .post("http://localhost:8080/api/UpdateLadder", {
             id: this.editedItem.id,
-            oldName: this.symbols[symbolIndex].name,
-            name: this.editedItem.name,
-            active: this.editedItem.active,
+            symbol: this.editedItem.symbol,
+            initialNumShares: this.editedItem.initialNumShares,
+            buyPercentage: this.editedItem.buyPercentage,
+            sellPercentage: this.editedItem.sellPercentage,
           })
           .then((response) => {
-            this.response = response.data;
-            Object.assign(this.symbols[symbolIndex], newSymbol);
+            var ladder = response.data;
+            Object.assign(this.ladders[ladderIndex], ladder);
             this.displaySnack(
               "success",
-              "Successfully updated symbol " + newSymbol.name + "."
+              "Successfully updated ladder " + ladder.symbol + "."
             );
           })
           .catch((err) => {
-            this.displaySnack("error", "Error while editing symbol. " + err);
-          }); */
+            this.displaySnack("error", "Error while editing ladder: " + err);
+          });
       } else {
         // create new
         axios
           .post("http://localhost:8080/api/CreateLadder", {
-            symbol: symbol,
-            initialNumShares: initialNumShares,
-            buyPercentage: buyPercentage,
-            sellPercentage: sellPercentage,
+            symbol: this.editedItem.symbol,
+            initialNumShares: this.editedItem.initialNumShares,
+            buyPercentage: this.editedItem.buyPercentage,
+            sellPercentage: this.editedItem.sellPercentage,
           })
           .then((response) => {
-            this.response = response.data;
-            newLadder.id = this.response.id;
-            this.ladders.push(newLadder);
+            var ladder = response.data;
+            this.ladders.push(ladder);
             this.displaySnack(
               "success",
-              "Successfully added ladder for symbol " + newLadder.symbol + "."
+              "Successfully added ladder for symbol " + ladder.symbol + "."
             );
           })
           .catch((err) => {
             this.displaySnack(
               "error",
-              "Error while creating new ladder. " + err
+              "Error while creating new ladder: " + err
             );
           });
       }
@@ -382,31 +382,47 @@ export default {
     createBlocks(item) {
       this.overlay = true;
       var symbol = item.symbol;
-      var initialNumShares = item.initialNumShares;
-      var buyPercentage = item.buyPercentage;
-      var sellPercentage = item.sellPercentage;
+      var ladderIndex = this.ladders.indexOf(item);
+
       axios
         .post("http://localhost:8080/api/CreateBlocksFromLadder", {
           id: item.id,
           symbol: symbol,
-          initialNumShares: initialNumShares,
-          buyPercentage: buyPercentage,
-          sellPercentage: sellPercentage,
+          initialNumShares: item.initialNumShares,
+          buyPercentage: item.buyPercentage,
+          sellPercentage: item.sellPercentage,
         })
         .then((response) => {
-          this.response = response.data;
+          var ladder = response.data;
+          Object.assign(this.ladders[ladderIndex], ladder);
           this.displaySnack(
             "success",
             "Successfully created blocks for symbol " + symbol + "."
           );
         })
         .catch((err) => {
-          this.displaySnack("error", "Error while creating blocks. " + err);
+          if (err.response) {
+            // Request made and server responded
+            //console.log(err.response.data);
+            //console.log(err.response.status);
+            //console.log(err.response.headers);
+            this.displaySnack(
+              "error",
+              "Error while creating blocks: " + err.response.data
+            );
+          } else if (err.request) {
+            // The request was made but no response was received
+            console.log(err.request);
+          } else {
+            // Something happened in setting up the request that triggered an Error
+            console.log("Error", err.message);
+          }
         });
     },
     deleteBlocks(item) {
       this.overlay = true;
       var symbol = item.symbol;
+      var ladderIndex = this.ladders.indexOf(item);
 
       axios
         .delete("http://localhost:8080/api/DeleteBlocksFromLadder", {
@@ -416,14 +432,15 @@ export default {
           },
         })
         .then((response) => {
-          this.response = response.data;
+          var ladder = response.data;
+          Object.assign(this.ladders[ladderIndex], ladder);
           this.displaySnack(
             "success",
             "Successfully deleted blocks for symbol " + symbol + "."
           );
         })
         .catch((err) => {
-          this.displaySnack("error", "Error while deleting blocks. " + err);
+          this.displaySnack("error", "Error while deleting blocks: " + err);
         });
     },
   },
