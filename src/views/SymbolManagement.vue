@@ -9,6 +9,7 @@
         :items="symbols"
         :loading="dataLoading"
         loading-text="Loading... Please wait"
+        no-data-text="No symbols have been added yet. Click Add Symbol to add your first symbol."
         class="elevation-1"
       >
         <template v-slot:top>

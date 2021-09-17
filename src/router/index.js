@@ -53,12 +53,20 @@ const routes = [
     component: () => import(/* webpackChunkName: "block-details" */ '../views/BlockDetails.vue')
   },
   {
-    path: '/trade-management',
-    name: 'TradeManagement',
+    path: '/trade-management-swing',
+    name: 'TradeManagementSwing',
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "trade-management" */ '../views/TradeManagement.vue')
+    component: () => import(/* webpackChunkName: "trade-management-swing" */ '../views/TradeManagementSwing.vue')
+  },
+  {
+    path: '/trade-management-day',
+    name: 'TradeManagementDay',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () => import(/* webpackChunkName: "trade-management-day" */ '../views/TradeManagementDay.vue')
   },
   {
     path: '/block-archive',

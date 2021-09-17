@@ -10,7 +10,7 @@
       >
         <template v-slot:top>
           <v-toolbar flat>
-            <v-toolbar-title>Trade Management</v-toolbar-title>
+            <v-toolbar-title>Trade Management Swing</v-toolbar-title>
             <v-divider class="mx-4" inset vertical></v-divider>
             <v-spacer></v-spacer>
           </v-toolbar>
@@ -25,7 +25,6 @@
             v-model="item.trading"
             inset
             :label="getSwitchLabel(item.trading)"
-
             @click="switchTrading(item)"
           ></v-switch>
         </template>
@@ -72,10 +71,12 @@ export default {
     },
   },
   mounted() {
-    axios.get("http://localhost:8080/api/GetTradingData").then((response) => {
-      this.tradingData = response.data;
-      this.dataLoading = false;
-    });
+    axios
+      .get("http://localhost:8080/api/GetTradingDataSwing")
+      .then((response) => {
+        this.tradingData = response.data;
+        this.dataLoading = false;
+      });
   },
   computed: {
     headers() {
@@ -85,11 +86,17 @@ export default {
         { text: "Current Qty", value: "currentQuantity" },
         { text: "Open Position Profit", value: "currentProfit" },
         { text: "Closed Position Profit", value: "archiveProfit" },
-        { text: "Total Day Profit", value: "totalProfit" },
+        { text: "Total Profit", value: "totalProfit" },
       ];
     },
   },
   methods: {
+    displaySnack(color, text) {
+      this.snackColor = color;
+      this.snackText = text;
+      this.snack = true;
+      this.overlay = false;
+    },
     getColor(profit) {
       if (profit === 0) return "blue";
       else if (profit > 0) return "green";
@@ -103,47 +110,32 @@ export default {
       var symbol = item.symbol;
       if (item.trading) {
         axios
-          .post("http://localhost:8080/api/CreateBlocksFromSymbol", null, {
-            params: { symbol },
-          })
+          .post(
+            "http://localhost:8080/api/CreateInitialBuyOrdersFromSymbol",
+            null,
+            {
+              params: { symbol },
+            }
+          )
           .then((response) => {
             this.switchTradeResponse = response.data;
             axios
-              .post(
-                "http://localhost:8080/api/CreateInitialBuyOrdersFromSymbol",
-                null,
-                {
-                  params: { symbol },
-                }
-              )
-              .then((response) => {
-                this.switchTradeResponse = response.data;
-                axios
-                  .post("http://localhost:8080/api/UpdateTradingSymbol", {
-                    id: item.symbolId,
-                    name: item.symbol,
-                    trading: item.trading,
-                  })
-                  .then(
-                    (response) => (this.updateSymbolResponse = response.data)
-                  )
-                  .catch((err) => {
-                    this.snackColor = "error";
-                    this.snackText = "Error while editing symbol. " + err;
-                    this.snack = true;
-                  });
+              .post("http://localhost:8080/api/UpdateTradingSymbol", {
+                id: item.symbolId,
+                name: item.symbol,
+                trading: item.trading,
               })
+              .then((response) => (this.updateSymbolResponse = response.data))
               .catch((err) => {
                 this.snackColor = "error";
-                this.snackText =
-                  "Error while creating initial buy orders for symbol. " + err;
+                this.snackText = "Error while editing symbol. " + err;
                 this.snack = true;
               });
           })
           .catch((err) => {
             this.snackColor = "error";
             this.snackText =
-              "Error while creating creating blocks for symbol. " + err;
+              "Error while creating initial buy orders for symbol. " + err;
             this.snack = true;
           });
       } else {
@@ -167,9 +159,16 @@ export default {
               });
           })
           .catch((err) => {
-            this.snackColor = "error";
-            this.snackText = "Error while closing open position. " + err;
-            this.snack = true;
+            if (err.response) {
+              this.displaySnack(
+                "error",
+                "Error while closing open positions: " + err.response.data
+              );
+            } else if (err.request) {
+              console.log(err.request);
+            } else {
+              console.log("Error", err.message);
+            }
           });
       }
     },

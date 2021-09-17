@@ -11,22 +11,15 @@
       </v-col>
 
       <v-col class="mb-4">
-        <h1 class="display-2 font-weight-bold mb-3">
-          Trading Tracker
-        </h1>
+        <h1 class="display-2 font-weight-bold mb-3">Trade Management System (TMS)</h1>
 
         <p class="subheading font-weight-regular">
           Please refer to the links below or the navigation sidebar
         </p>
       </v-col>
 
-      <v-col
-        class="mb-5"
-        cols="12"
-      >
-        <h2 class="headline font-weight-bold mb-3">
-          Links
-        </h2>
+      <v-col class="mb-5" cols="12">
+        <h2 class="headline font-weight-bold mb-3">Links</h2>
 
         <v-row justify="center">
           <router-link
@@ -44,24 +37,32 @@
 </template>
 
 <script>
-  export default {
-    name: 'HomePage',
+export default {
+  name: "HomePage",
 
-    data: () => ({
-      links: [
-        {
-          text: 'Price Ladder',
-          to: '/price-ladder',
-        },
-        {
-          text: 'Order Blocks',
-          to: '/order-blocks',
-        },
-        {
-          text: 'Symbol Maintenance',
-          to: '/symbol-maintenance',
-        },
-      ],
-    }),
-  }
+  data: () => ({
+    links: [
+      {
+        text: 'Symbol Management',
+        to: '/symbol-management',
+      },
+      {
+        text: 'Block Management',
+        to: '/block-management',
+      },
+      {
+        text: 'Trade Management - Swing',
+        to: '/trade-management-swing',
+      },
+      {
+        text: 'Trade Management - Day',
+        to: '/trade-management-day',
+      },
+      {
+        text: 'Block Archives',
+        to: '/block-archive',
+      },
+    ],
+  }),
+};
 </script>

@@ -15,7 +15,7 @@
           </v-list-item-icon>
           <v-list-item-title>Home</v-list-item-title>
         </v-list-item>
-        <v-list-item color="primary" to="/price-ladder">
+        <!--         <v-list-item color="primary" to="/price-ladder">
           <v-list-item-icon>
             <v-icon>mdi-ladder</v-icon>
           </v-list-item-icon>
@@ -26,7 +26,7 @@
             <v-icon>mdi-layers-triple</v-icon>
           </v-list-item-icon>
           <v-list-item-title>Order Blocks</v-list-item-title>
-        </v-list-item>
+        </v-list-item> -->
         <v-list-item color="primary" to="/symbol-management">
           <v-list-item-icon>
             <v-icon>mdi-layers-triple</v-icon>
@@ -39,11 +39,17 @@
           </v-list-item-icon>
           <v-list-item-title>Block Management</v-list-item-title>
         </v-list-item>
-        <v-list-item color="primary" to="/trade-management">
+        <v-list-item color="primary" to="/trade-management-swing">
           <v-list-item-icon>
             <v-icon>mdi-layers-triple</v-icon>
           </v-list-item-icon>
-          <v-list-item-title>Trade Management</v-list-item-title>
+          <v-list-item-title>Trade Management - Swing</v-list-item-title>
+        </v-list-item>
+        <v-list-item color="primary" to="/trade-management-day">
+          <v-list-item-icon>
+            <v-icon>mdi-layers-triple</v-icon>
+          </v-list-item-icon>
+          <v-list-item-title>Trade Management - Day</v-list-item-title>
         </v-list-item>
         <v-list-item color="primary" to="/block-archive">
           <v-list-item-icon>
