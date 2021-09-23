@@ -45,7 +45,7 @@ const routes = [
     component: () => import(/* webpackChunkName: "block-management" */ '../views/BlockManagement.vue')
   },
   {
-    path: '/block-details',
+    path: '/block-details/:symbol',
     name: 'BlockDetails',
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route

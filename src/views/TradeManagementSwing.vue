@@ -111,7 +111,7 @@ export default {
       if (item.trading) {
         axios
           .post(
-            "http://localhost:8080/api/CreateInitialBuyOrdersFromSymbol",
+            "http://localhost:8080/api/CreateInitialBuyOrdersForSymbol",
             null,
             {
               params: { symbol },

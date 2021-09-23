@@ -105,6 +105,7 @@ export default {
         { text: "Sell Order", value: "sellOrderCreated" },
         { text: "Sell Order Price", value: "sellOrderPrice" },
         { text: "Sell Order Executed", value: "sellOrderExecuted" },
+        { text: "Stop Loss Price", value: "stopLossOrderPrice" },
       ];
     },
   },

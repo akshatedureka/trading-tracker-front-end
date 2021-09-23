@@ -37,7 +37,7 @@
                 <v-card-text>
                   <v-container>
                     <v-row>
-                      <v-col cols="12" sm="3" md="3">
+                      <v-col cols="12" sm="4" md="4">
                         <v-select
                           v-model="editedItem.symbol"
                           :items="availableSymbols"
@@ -47,22 +47,30 @@
                           ref="symbolName"
                         ></v-select>
                       </v-col>
-                      <v-col cols="12" sm="3" md="3">
+                      <v-col cols="12" sm="4" md="4">
                         <v-text-field
                           v-model="editedItem.initialNumShares"
                           label="Number Of Shares"
                         ></v-text-field>
                       </v-col>
-                      <v-col cols="12" sm="3" md="3">
+                    </v-row>
+                    <v-row>
+                      <v-col cols="12" sm="4" md="4">
                         <v-text-field
                           v-model="editedItem.buyPercentage"
                           label="Buy Percentage"
                         ></v-text-field>
                       </v-col>
-                      <v-col cols="12" sm="3" md="3">
+                      <v-col cols="12" sm="4" md="4">
                         <v-text-field
                           v-model="editedItem.sellPercentage"
                           label="Sell Percentage"
+                        ></v-text-field>
+                      </v-col>
+                      <v-col cols="12" sm="4" md="4">
+                        <v-text-field
+                          v-model="editedItem.stopLossPercentage"
+                          label="Stop Loss Percentage"
                         ></v-text-field>
                       </v-col>
                     </v-row>
@@ -197,12 +205,18 @@ export default {
       dialogDelete: false,
       editedIndex: -1,
       editedItem: {
-        name: "",
-        active: "",
+        symbol: "",
+        initialNumShares: "",
+        buyPercentage: "",
+        sellPercentage: "",
+        stopLossPercentage: "",
       },
       defaultItem: {
-        name: "",
-        active: "",
+        symbol: "",
+        initialNumShares: "",
+        buyPercentage: "",
+        sellPercentage: "",
+        stopLossPercentage: "",
       },
       snack: false,
       snackColor: "",
@@ -254,6 +268,7 @@ export default {
         { text: "Initial Num Shares", value: "initialNumShares" },
         { text: "Buy Percentage", value: "buyPercentage" },
         { text: "Sell Percentage", value: "sellPercentage" },
+        { text: "Stop Loss Percentage", value: "stopLossPercentage" },
         { text: "Actions", value: "actions", sortable: false },
         { text: "Create Blocks", value: "CreateBlocks", align: "center" },
         { text: "Delete Blocks", value: "DeleteBlocks", align: "center" },
@@ -335,6 +350,7 @@ export default {
             initialNumShares: this.editedItem.initialNumShares,
             buyPercentage: this.editedItem.buyPercentage,
             sellPercentage: this.editedItem.sellPercentage,
+            stopLossPercentage: this.editedItem.stopLossPercentage,
           })
           .then((response) => {
             var ladder = response.data;
@@ -355,6 +371,7 @@ export default {
             initialNumShares: this.editedItem.initialNumShares,
             buyPercentage: this.editedItem.buyPercentage,
             sellPercentage: this.editedItem.sellPercentage,
+            stopLossPercentage: this.editedItem.stopLossPercentage,
           })
           .then((response) => {
             var ladder = response.data;
@@ -391,6 +408,7 @@ export default {
           initialNumShares: item.initialNumShares,
           buyPercentage: item.buyPercentage,
           sellPercentage: item.sellPercentage,
+          stopLossPercentage: item.stopLossPercentage,          
         })
         .then((response) => {
           var ladder = response.data;
