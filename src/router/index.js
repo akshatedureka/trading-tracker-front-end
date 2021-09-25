@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import store from '@/store';
 //import OrderBlocks from '../views/OrderBlocks.vue'
 //import Ladder from '../views/PriceLadder.vue'
 import Home from '../views/Home.vue'
@@ -10,7 +11,10 @@ const routes = [
   {
     path: '/',
     name: 'Home',
-    component: Home
+    component: Home,
+    meta: {
+      auth: false
+    }
   },
   {
     path: '/price-ladder',
@@ -18,7 +22,10 @@ const routes = [
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "price-ladder" */ '../views/PriceLadder.vue')
+    component: () => import(/* webpackChunkName: "price-ladder" */ '../views/PriceLadder.vue'),
+    meta: {
+      auth: true
+    }
   },
   {
     path: '/order-blocks',
@@ -26,7 +33,10 @@ const routes = [
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "order-blocks" */ '../views/OrderBlocks.vue')
+    component: () => import(/* webpackChunkName: "order-blocks" */ '../views/OrderBlocks.vue'),
+    meta: {
+      auth: true
+    }
   },
   {
     path: '/symbol-management',
@@ -34,7 +44,10 @@ const routes = [
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "symbol-management" */ '../views/SymbolManagement.vue')
+    component: () => import(/* webpackChunkName: "symbol-management" */ '../views/SymbolManagement.vue'),
+    meta: {
+      auth: true
+    }
   },
   {
     path: '/block-management',
@@ -42,7 +55,10 @@ const routes = [
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "block-management" */ '../views/BlockManagement.vue')
+    component: () => import(/* webpackChunkName: "block-management" */ '../views/BlockManagement.vue'),
+    meta: {
+      auth: true
+    }
   },
   {
     path: '/block-details/:symbol',
@@ -50,7 +66,10 @@ const routes = [
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "block-details" */ '../views/BlockDetails.vue')
+    component: () => import(/* webpackChunkName: "block-details" */ '../views/BlockDetails.vue'),
+    meta: {
+      auth: true
+    }
   },
   {
     path: '/trade-management-swing',
@@ -58,7 +77,10 @@ const routes = [
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "trade-management-swing" */ '../views/TradeManagementSwing.vue')
+    component: () => import(/* webpackChunkName: "trade-management-swing" */ '../views/TradeManagementSwing.vue'),
+    meta: {
+      auth: true
+    }
   },
   {
     path: '/trade-management-day',
@@ -66,7 +88,10 @@ const routes = [
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "trade-management-day" */ '../views/TradeManagementDay.vue')
+    component: () => import(/* webpackChunkName: "trade-management-day" */ '../views/TradeManagementDay.vue'),
+    meta: {
+      auth: true
+    }
   },
   {
     path: '/block-archive',
@@ -74,7 +99,10 @@ const routes = [
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "block-archive" */ '../views/BlockArchive.vue')
+    component: () => import(/* webpackChunkName: "block-archive" */ '../views/BlockArchive.vue'),
+    meta: {
+      auth: true
+    }
   },
 ]
 
@@ -82,6 +110,15 @@ const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
   routes
+})
+
+router.beforeEach((to, from, next) => {
+  if (to.meta.auth && !store.state.authenticated) {
+    next('/');
+  } else {
+    document.title = `${process.env.VUE_APP_TITLE} - ${to.name}`
+    next();
+  }
 })
 
 export default router

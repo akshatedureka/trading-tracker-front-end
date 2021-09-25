@@ -5,6 +5,25 @@
       <router-link to="/" class="app-bar-link">
         <v-toolbar-title>Trade Management System (TMS)</v-toolbar-title>
       </router-link>
+      <v-spacer></v-spacer>
+      <v-btn
+        color="blue darken-1"
+        @click="handleClickSignIn"
+        v-if="!$store.state.authenticated"
+        :disabled="!isInit"
+      >
+        <v-icon left>mdi-google</v-icon>
+        Sign in with Google
+      </v-btn>
+      <v-btn
+        color="blue darken-1"
+        @click="handleClickSignOut"
+        v-if="$store.state.authenticated"
+        :disabled="!isInit"
+      >
+        <v-icon left>mdi-google</v-icon>
+        Sign out
+      </v-btn>
     </v-app-bar>
 
     <v-navigation-drawer v-model="drawer" absolute temporary>
@@ -71,27 +90,74 @@ export default {
 
   components: {},
 
-  data: () => ({
-    drawer: false,
-    group: null,
-    items: [
-      {
-        action: "mdi-wrench",
-        active: true,
-        title: "Price Ladder",
-        to: "/price-ladder",
-      },
-      {
-        action: "mdi-school",
-        items: [
-          { title: "Create Lot" },
-          { title: "Edit Lot" },
-          { title: "Search Lot" },
-        ],
-        title: "Lots",
-      },
-    ],
-  }),
+  data() {
+    return {
+      isInit: false,
+      isSignIn: false,
+      drawer: false,
+      group: null,
+      items: [
+        {
+          action: "mdi-wrench",
+          active: true,
+          title: "Price Ladder",
+          to: "/price-ladder",
+        },
+        {
+          action: "mdi-school",
+          items: [
+            { title: "Create Lot" },
+            { title: "Edit Lot" },
+            { title: "Search Lot" },
+          ],
+          title: "Lots",
+        },
+      ],
+    };
+  },
+  methods: {
+    async handleClickGetAuth() {
+      try {
+        const authCode = await this.$gAuth.getAuthCode();
+        const response = await this.$http.post(
+          "http://your-backend-server.com/auth/google",
+          { code: authCode, redirect_uri: "postmessage" }
+        );
+      } catch (error) {
+        // On fail do something
+      }
+    },
+    async handleClickSignIn() {
+      try {
+        const googleUser = await this.$gAuth.signIn();
+        console.log("user", googleUser);
+        //this.isSignIn = this.$gAuth.isAuthorized;
+        this.$store.commit("setAuthentication", this.$gAuth.isAuthorized);
+      } catch (error) {
+        // On fail do something
+        console.error(error);
+        return null;
+      }
+    },
+    async handleClickSignOut() {
+      try {
+        await this.$gAuth.signOut();
+        //this.isSignIn = this.$gAuth.isAuthorized;
+        console.log(this.$gAuth.isAuthorized);
+        this.$store.commit("setAuthentication", this.$gAuth.isAuthorized);
+      } catch (error) {
+        // On fail do something
+      }
+    },
+  },
+  mounted() {
+    let that = this;
+    let checkGauthLoad = setInterval(function () {
+      that.isInit = that.$gAuth.isInit;
+      //that.isSignIn = $store.state.authenticated;
+      if (that.isInit) clearInterval(checkGauthLoad);
+    }, 1000);
+  },
 };
 </script>
 
