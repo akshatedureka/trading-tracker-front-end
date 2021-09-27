@@ -136,7 +136,7 @@ export default {
   },
   mounted() {
     axios
-      .get("http://localhost:8080/api/GetTradingSymbols")
+      .get(process.env.VUE_APP_API_ENDPOINT_URL + "/GetTradingSymbols")
       .then((response) => {
         this.symbols = response.data;
         this.dataLoading = false;
