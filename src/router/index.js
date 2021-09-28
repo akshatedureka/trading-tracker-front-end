@@ -46,7 +46,7 @@ const routes = [
     // which is lazy-loaded when the route is visited.
     component: () => import(/* webpackChunkName: "symbol-management" */ '../views/SymbolManagement.vue'),
     meta: {
-      auth: true
+      auth: false
     }
   },
   {
