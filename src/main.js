@@ -7,8 +7,10 @@ import router from './router'
 import GAuth from 'vue-google-oauth2'
 import axios from "axios";
 
+axios.defaults.withCredentials = true;
 axios.interceptors.request.use((request) => {
   request.headers['Access-Control-Allow-Origin'] = '*';
+  request.headers['Access-Control-Allow-Credentials'] = true;
   console.log(request);
 
   let params = new URLSearchParams();
