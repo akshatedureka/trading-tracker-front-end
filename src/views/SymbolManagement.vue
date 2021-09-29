@@ -136,11 +136,13 @@ export default {
   },
   mounted() {
     axios
-      .get(process.env.VUE_APP_API_ENDPOINT_URL + "/GetTradingSymbols", {
-        headers: {
-          'Access-Control-Allow-Origin': "*",
-        },
-      })
+      .get(process.env.VUE_APP_API_ENDPOINT_URL + "/GetTradingSymbols"
+      //, {
+        // headers: {
+        //   'Access-Control-Allow-Origin': "*",
+        // },
+      //}
+      )
       .then((response) => {
         this.symbols = response.data;
         this.dataLoading = false;
