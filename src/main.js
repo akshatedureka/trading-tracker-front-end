@@ -9,13 +9,16 @@ import axios from "axios";
 
 axios.defaults.withCredentials = true;
 axios.interceptors.request.use((request) => {
-  request.headers['Access-Control-Allow-Origin'] = '*';
-  request.headers['Access-Control-Allow-Credentials'] = true;
-  console.log(request);
+  //request.headers['Access-Control-Allow-Origin'] = '*';
+  //request.headers['Access-Control-Allow-Credentials'] = true;
+  request.headers.common.Authorization = `Bearer ${store.state.user.token}`;
+  request.headers.common.From = store.state.user.id;
+  //request.headers['User-Id'] = store.state.user.id;
+  //console.log(request);
 
-  let params = new URLSearchParams();
-  params.append('user', 'Test');
-  request.params = params;
+  //let params = new URLSearchParams();
+  //params.append('user', 'Test');
+  //request.params = params;
   return request;
 })
 

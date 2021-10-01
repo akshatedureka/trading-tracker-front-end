@@ -136,19 +136,32 @@ export default {
   },
   mounted() {
     axios
-      .get(process.env.VUE_APP_API_ENDPOINT_URL + "/GetTradingSymbols"
-      //, {
+      .get(
+        process.env.VUE_APP_API_ENDPOINT_URL + "/GetTradingSymbols"
+        //, {
         // headers: {
         //   'Access-Control-Allow-Origin': "*",
         // },
-      //}
+        //}
       )
       .then((response) => {
         this.symbols = response.data;
         this.dataLoading = false;
       })
       .catch((err) => {
-        this.displaySnack("error", "Error while getting symbols. " + err);
+        if (err.response) {
+          // Request made and server responded
+          this.displaySnack(
+            "error",
+            "Error while getting symbols. " + err.response.data
+          );
+        } else if (err.request) {
+          // The request was made but no response was received
+          console.log(err.request);
+        } else {
+          // Something happened in setting up the request that triggered an Error
+          console.log("Error", err.message);
+        }
       });
   },
   watch: {
@@ -192,29 +205,33 @@ export default {
     },
     deleteItemConfirm() {
       this.overlay = true;
-      var symbolName = this.editedItem.name;
-      var symbolId = this.editedItem.id;
-      var symbolIndex = this.editedIndex;
+      var symbol = this.editedItem.name;
       axios
         .delete("http://localhost:8080/api/DeleteTradingSymbol", {
-          data: {
-            id: symbolId,
-            name: symbolName,
-          },
+          params: { symbol },
         })
         .then((response) => {
           this.response = response.data;
-          this.symbols.splice(symbolIndex, 1);
+          this.symbols = response.data.symbols;
           this.displaySnack(
             "success",
-            "Successfully deleted symbol " + symbolName + "."
+            "Successfully deleted symbol " + symbol + "."
           );
         })
         .catch((err) => {
-          this.displaySnack(
-            "error",
-            "Error while deleting symbol " + symbolName + ". " + err
-          );
+          if (err.response) {
+            // Request made and server responded
+            this.displaySnack(
+              "error",
+              "Error while deleting symbol " + err.response.data
+            );
+          } else if (err.request) {
+            // The request was made but no response was received
+            console.log(err.request);
+          } else {
+            // Something happened in setting up the request that triggered an Error
+            console.log("Error", err.message);
+          }
         });
       this.closeDelete();
     },
@@ -248,14 +265,26 @@ export default {
           })
           .then((response) => {
             this.response = response.data;
-            Object.assign(this.symbols[symbolIndex], newSymbol);
+            this.symbols = response.data.symbols;
             this.displaySnack(
               "success",
               "Successfully updated symbol " + newSymbol.name + "."
             );
           })
           .catch((err) => {
-            this.displaySnack("error", "Error while editing symbol. " + err);
+            if (err.response) {
+              // Request made and server responded
+              this.displaySnack(
+                "error",
+                "Error while editing symbol. " + err.response.data
+              );
+            } else if (err.request) {
+              // The request was made but no response was received
+              console.log(err.request);
+            } else {
+              // Something happened in setting up the request that triggered an Error
+              console.log("Error", err.message);
+            }
           });
       } else {
         // create new
@@ -265,18 +294,26 @@ export default {
           })
           .then((response) => {
             this.response = response.data;
-            newSymbol.id = this.response.id;
-            this.symbols.push(newSymbol);
+            this.symbols = response.data.symbols;
             this.displaySnack(
               "success",
               "Successfully added symbol " + newSymbol.name + "."
             );
           })
           .catch((err) => {
-            this.displaySnack(
-              "error",
-              "Error while creating new symbol. " + err
-            );
+            if (err.response) {
+              // Request made and server responded
+              this.displaySnack(
+                "error",
+                "Error while creating new symbol. " + err.response.data
+              );
+            } else if (err.request) {
+              // The request was made but no response was received
+              console.log(err.request);
+            } else {
+              // Something happened in setting up the request that triggered an Error
+              console.log("Error", err.message);
+            }
           });
       }
       this.close();

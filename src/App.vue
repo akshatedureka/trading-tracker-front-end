@@ -130,9 +130,14 @@ export default {
     async handleClickSignIn() {
       try {
         const googleUser = await this.$gAuth.signIn();
+        const userId = googleUser.ya;
+        const token = googleUser.$b.id_token;
         console.log("user", googleUser);
         //this.isSignIn = this.$gAuth.isAuthorized;
         this.$store.commit("setAuthentication", this.$gAuth.isAuthorized);
+        this.$store.commit("setUser", {userId, token});
+        //googleUser.$b.id_token
+        console.log(this.$store.state.user);
       } catch (error) {
         // On fail do something
         console.error(error);
