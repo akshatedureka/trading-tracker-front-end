@@ -297,29 +297,32 @@ export default {
     },
     deleteItemConfirm() {
       this.overlay = true;
-      var ladderIndex = this.editedIndex;
+      var symbol = this.editedItem.symbol;
       axios
         .delete("http://localhost:8080/api/DeleteLadder", {
-          data: {
-            id: this.editedItem.id,
-            symbol: this.editedItem.symbol,
-          },
+          params: { symbol },
         })
         .then((response) => {
-          var deletedLadder = response.data;
-          this.ladders.splice(ladderIndex, 1);
+          this.ladders = response.data.ladders;
           this.displaySnack(
             "success",
-            "Successfully deleted ladder for symbol " +
-              deletedLadder.symbol +
-              "."
+            "Successfully deleted ladder for symbol " + symbol + "."
           );
         })
         .catch((err) => {
-          this.displaySnack(
-            "error",
-            "Error while deleting ladder for symbol:" + err
-          );
+          if (err.response) {
+            // Request made and server responded
+            this.displaySnack(
+              "error",
+              "Error while deleting ladder. " + err.response.data
+            );
+          } else if (err.request) {
+            // The request was made but no response was received
+            console.log(err.request);
+          } else {
+            // Something happened in setting up the request that triggered an Error
+            console.log("Error", err.message);
+          }
         });
       this.closeDelete();
     },
@@ -339,14 +342,13 @@ export default {
     },
     save() {
       this.overlay = true;
-      var ladderIndex = this.editedIndex;
-
+      var ladderSymbol = this.editedItem.symbol;
       if (this.editedIndex > -1) {
         // edit
         axios
           .post("http://localhost:8080/api/UpdateLadder", {
             id: this.editedItem.id,
-            symbol: this.editedItem.symbol,
+            symbol: ladderSymbol,
             initialNumShares: this.editedItem.initialNumShares,
             buyPercentage: this.editedItem.buyPercentage,
             sellPercentage: this.editedItem.sellPercentage,
@@ -354,38 +356,58 @@ export default {
           })
           .then((response) => {
             var ladder = response.data;
-            Object.assign(this.ladders[ladderIndex], ladder);
+            this.ladders = response.data.ladders;
             this.displaySnack(
               "success",
-              "Successfully updated ladder " + ladder.symbol + "."
+              "Successfully updated ladder for symbol " + ladderSymbol + "."
             );
           })
           .catch((err) => {
-            this.displaySnack("error", "Error while editing ladder: " + err);
+            if (err.response) {
+              // Request made and server responded
+              this.displaySnack(
+                "error",
+                "Error while editing new ladder. " + err.response.data
+              );
+            } else if (err.request) {
+              // The request was made but no response was received
+              console.log(err.request);
+            } else {
+              // Something happened in setting up the request that triggered an Error
+              console.log("Error", err.message);
+            }
           });
       } else {
         // create new
         axios
           .post("http://localhost:8080/api/CreateLadder", {
-            symbol: this.editedItem.symbol,
+            symbol: ladderSymbol,
             initialNumShares: this.editedItem.initialNumShares,
             buyPercentage: this.editedItem.buyPercentage,
             sellPercentage: this.editedItem.sellPercentage,
             stopLossPercentage: this.editedItem.stopLossPercentage,
           })
           .then((response) => {
-            var ladder = response.data;
-            this.ladders.push(ladder);
+            this.ladders = response.data.ladders;
             this.displaySnack(
               "success",
-              "Successfully added ladder for symbol " + ladder.symbol + "."
+              "Successfully added ladder for symbol " + ladderSymbol + "."
             );
           })
           .catch((err) => {
-            this.displaySnack(
-              "error",
-              "Error while creating new ladder: " + err
-            );
+            if (err.response) {
+              // Request made and server responded
+              this.displaySnack(
+                "error",
+                "Error while creating new ladder. " + err.response.data
+              );
+            } else if (err.request) {
+              // The request was made but no response was received
+              console.log(err.request);
+            } else {
+              // Something happened in setting up the request that triggered an Error
+              console.log("Error", err.message);
+            }
           });
       }
       this.close();
@@ -408,7 +430,7 @@ export default {
           initialNumShares: item.initialNumShares,
           buyPercentage: item.buyPercentage,
           sellPercentage: item.sellPercentage,
-          stopLossPercentage: item.stopLossPercentage,          
+          stopLossPercentage: item.stopLossPercentage,
         })
         .then((response) => {
           var ladder = response.data;
