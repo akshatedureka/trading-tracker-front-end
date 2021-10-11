@@ -138,11 +138,6 @@ export default {
     axios
       .get(
         process.env.VUE_APP_API_ENDPOINT_URL + "/GetTradingSymbols"
-        //, {
-        // headers: {
-        //   'Access-Control-Allow-Origin': "*",
-        // },
-        //}
       )
       .then((response) => {
         this.symbols = response.data;

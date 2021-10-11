@@ -433,8 +433,7 @@ export default {
           stopLossPercentage: item.stopLossPercentage,
         })
         .then((response) => {
-          var ladder = response.data;
-          Object.assign(this.ladders[ladderIndex], ladder);
+          this.ladders = response.data.ladders;
           this.displaySnack(
             "success",
             "Successfully created blocks for symbol " + symbol + "."
@@ -472,15 +471,29 @@ export default {
           },
         })
         .then((response) => {
-          var ladder = response.data;
-          Object.assign(this.ladders[ladderIndex], ladder);
+          this.ladders = response.data.ladders;
           this.displaySnack(
             "success",
             "Successfully deleted blocks for symbol " + symbol + "."
           );
         })
         .catch((err) => {
-          this.displaySnack("error", "Error while deleting blocks: " + err);
+          if (err.response) {
+            // Request made and server responded
+            //console.log(err.response.data);
+            //console.log(err.response.status);
+            //console.log(err.response.headers);
+            this.displaySnack(
+              "error",
+              "Error while deleting blocks: " + err.response.data
+            );
+          } else if (err.request) {
+            // The request was made but no response was received
+            console.log(err.request);
+          } else {
+            // Something happened in setting up the request that triggered an Error
+            console.log("Error", err.message);
+          }
         });
     },
   },

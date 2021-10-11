@@ -70,7 +70,7 @@ export default {
       val || this.closeDelete();
     },
   },
-  mounted() {
+  mounted() { // ToDo: Disable symbols that do not have blocks created yet
     axios
       .get("http://localhost:8080/api/GetTradingDataSwing")
       .then((response) => {
@@ -127,16 +127,36 @@ export default {
               })
               .then((response) => (this.updateSymbolResponse = response.data))
               .catch((err) => {
-                this.snackColor = "error";
-                this.snackText = "Error while editing symbol. " + err;
-                this.snack = true;
+                if (err.response) {
+                  // Request made and server responded
+                  this.displaySnack(
+                    "error",
+                    "Error while updating trading symbol. " + err.response.data
+                  );
+                } else if (err.request) {
+                  // The request was made but no response was received
+                  console.log(err.request);
+                } else {
+                  // Something happened in setting up the request that triggered an Error
+                  console.log("Error", err.message);
+                }
               });
           })
           .catch((err) => {
-            this.snackColor = "error";
-            this.snackText =
-              "Error while creating initial buy orders for symbol. " + err;
-            this.snack = true;
+            if (err.response) {
+              // Request made and server responded
+              this.displaySnack(
+                "error",
+                "Error while creating buy orders for symbol. " +
+                  err.response.data
+              );
+            } else if (err.request) {
+              // The request was made but no response was received
+              console.log(err.request);
+            } else {
+              // Something happened in setting up the request that triggered an Error
+              console.log("Error", err.message);
+            }
           });
       } else {
         axios
@@ -153,20 +173,33 @@ export default {
               })
               .then((response) => (this.updateSymbolResponse = response.data))
               .catch((err) => {
-                this.snackColor = "error";
-                this.snackText = "Error while editing symbol. " + err;
-                this.snack = true;
+                if (err.response) {
+                  // Request made and server responded
+                  this.displaySnack(
+                    "error",
+                    "Error while updating trading symbol. " + err.response.data
+                  );
+                } else if (err.request) {
+                  // The request was made but no response was received
+                  console.log(err.request);
+                } else {
+                  // Something happened in setting up the request that triggered an Error
+                  console.log("Error", err.message);
+                }
               });
           })
           .catch((err) => {
             if (err.response) {
+              // Request made and server responded
               this.displaySnack(
                 "error",
-                "Error while closing open positions: " + err.response.data
+                "Error while closing open positions. " + err.response.data
               );
             } else if (err.request) {
+              // The request was made but no response was received
               console.log(err.request);
             } else {
+              // Something happened in setting up the request that triggered an Error
               console.log("Error", err.message);
             }
           });
