@@ -25,7 +25,6 @@
             v-model="item.trading"
             inset
             :label="getSwitchLabel(item.trading)"
-
             @click="switchTrading(item)"
           ></v-switch>
         </template>
@@ -47,7 +46,7 @@
 import axios from "axios";
 
 export default {
-  name: "SymbolMaintenance",
+  name: "TradeManagementDay",
   props: {
     msg: String,
   },
@@ -72,10 +71,12 @@ export default {
     },
   },
   mounted() {
-    axios.get("http://localhost:8080/api/GetTradingDataDay").then((response) => {
-      this.tradingData = response.data;
-      this.dataLoading = false;
-    });
+    axios
+      .get("http://localhost:8080/api/GetTradingDataDay")
+      .then((response) => {
+        this.tradingData = response.data;
+        this.dataLoading = false;
+      });
   },
   computed: {
     headers() {
@@ -103,74 +104,72 @@ export default {
       var symbol = item.symbol;
       if (item.trading) {
         axios
-          .post("http://localhost:8080/api/CreateBlocksFromSymbol", null, {
-            params: { symbol },
+          .post("http://localhost:8080/api/UpdateTradingSymbol", {
+            id: item.symbolId,
+            name: item.symbol,
+            dayTrading: item.trading,
           })
-          .then((response) => {
-            this.switchTradeResponse = response.data;
-            axios
-              .post(
-                "http://localhost:8080/api/CreateInitialBuyOrdersFromSymbol",
-                null,
-                {
-                  params: { symbol },
-                }
-              )
-              .then((response) => {
-                this.switchTradeResponse = response.data;
-                axios
-                  .post("http://localhost:8080/api/UpdateTradingSymbol", {
-                    id: item.symbolId,
-                    name: item.symbol,
-                    trading: item.trading,
-                  })
-                  .then(
-                    (response) => (this.updateSymbolResponse = response.data)
-                  )
-                  .catch((err) => {
-                    this.snackColor = "error";
-                    this.snackText = "Error while editing symbol. " + err;
-                    this.snack = true;
-                  });
-              })
-              .catch((err) => {
-                this.snackColor = "error";
-                this.snackText =
-                  "Error while creating initial buy orders for symbol. " + err;
-                this.snack = true;
-              });
-          })
+          .then((response) => (this.updateSymbolResponse = response.data))
           .catch((err) => {
-            this.snackColor = "error";
-            this.snackText =
-              "Error while creating creating blocks for symbol. " + err;
-            this.snack = true;
+            if (err.response) {
+              // Request made and server responded
+              this.displaySnack(
+                "error",
+                "Error while updating symbol. " + err.response.data
+              );
+            } else if (err.request) {
+              // The request was made but no response was received
+              console.log(err.request);
+            } else {
+              // Something happened in setting up the request that triggered an Error
+              console.log("Error", err.message);
+            }
           });
       } else {
-        axios
+/*         axios
           .post("http://localhost:8080/api/CloseOpenPosition", null, {
             params: { symbol },
           })
           .then((response) => {
-            this.switchTradeResponse = response.data;
+            this.switchTradeResponse = response.data; */
             axios
               .post("http://localhost:8080/api/UpdateTradingSymbol", {
                 id: item.symbolId,
                 name: item.symbol,
-                trading: item.trading,
+                dayTrading: item.trading,
               })
               .then((response) => (this.updateSymbolResponse = response.data))
               .catch((err) => {
-                this.snackColor = "error";
-                this.snackText = "Error while editing symbol. " + err;
-                this.snack = true;
+                if (err.response) {
+                  // Request made and server responded
+                  this.displaySnack(
+                    "error",
+                    "Error while updating symbol. " + err.response.data
+                  );
+                } else if (err.request) {
+                  // The request was made but no response was received
+                  console.log(err.request);
+                } else {
+                  // Something happened in setting up the request that triggered an Error
+                  console.log("Error", err.message);
+                }
               });
-          })
+/*           })
           .catch((err) => {
-            this.snackColor = "error";
-            this.snackText = "Error while closing open position. " + err;
-            this.snack = true;
-          });
+            if (err.response) {
+              // Request made and server responded
+              this.displaySnack(
+                "error",
+                "Error while closing orders and positions. " + err.response.data
+              );
+            } else if (err.request) {
+              // The request was made but no response was received
+              console.log(err.request);
+            } else {
+              // Something happened in setting up the request that triggered an Error
+              console.log("Error", err.message);
+            }
+          }); */
       }
     },
   },

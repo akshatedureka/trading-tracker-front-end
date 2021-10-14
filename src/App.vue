@@ -85,6 +85,8 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   name: "App",
 
@@ -138,6 +140,32 @@ export default {
         this.$store.commit("setUser", {userId, token});
         //googleUser.$b.id_token
         console.log(this.$store.state.user);
+
+        // create new user
+        axios
+          .post("http://localhost:8080/api/CreateUser")
+          .then((response) => {
+            this.response = response.data;
+            this.displaySnack(
+              "success",
+              "Successfully added user."
+            );
+          })
+          .catch((err) => {
+            if (err.response) {
+              // Request made and server responded
+              this.displaySnack(
+                "error",
+                "Error while creating new user. " + err.response.data
+              );
+            } else if (err.request) {
+              // The request was made but no response was received
+              console.log(err.request);
+            } else {
+              // Something happened in setting up the request that triggered an Error
+              console.log("Error", err.message);
+            }
+          });
       } catch (error) {
         // On fail do something
         console.error(error);

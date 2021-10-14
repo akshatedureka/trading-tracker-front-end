@@ -82,7 +82,7 @@ export default {
     headers() {
       return [
         { text: "Symbol", value: "symbol" },
-        { text: "Trading", value: "trading" },
+        { text: "Trading", value: "swingTrading" },
         { text: "Current Qty", value: "currentQuantity" },
         { text: "Open Position Profit", value: "currentProfit" },
         { text: "Closed Position Profit", value: "archiveProfit" },
