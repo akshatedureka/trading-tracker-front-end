@@ -38,7 +38,7 @@ axios.interceptors.request.use((request) => {
 } */
 
 const gauthOption = {
-  clientId: '225314601298-c3rtso3o9hpm5se1a30qoi2tu81p48cj.apps.googleusercontent.com', // ToDo:
+  clientId: process.env.VUE_APP_GOOGLE_OAUTH_CLIENT_ID,
   scope: 'profile email',
   prompt: 'select_account'
 }
