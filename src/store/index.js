@@ -12,8 +12,11 @@ export default new Vuex.Store({
         authenticated: false,
         user: {
             id: "",
+            email: "",
             token: "",
         },
+        accountType: "",
+        hasEnteredKeys: "",
         errors: {}
     },
 
@@ -27,9 +30,16 @@ export default new Vuex.Store({
         setAuthentication(state, status) {
             state.authenticated = status;
         },
-        setUser(state, userData){
+        setUser(state, userData) {
             state.user.id = userData.userId;
+            state.user.email = userData.email;
             state.user.token = userData.token;
+        },
+        setAccountType(state, accountType) {
+            state.accountType = accountType;
+        },
+        setHasEnteredKeys(state, hasEnteredKeys) {
+            state.hasEnteredKeys = hasEnteredKeys;
         },
         SET_ERRORS(state, data) {
             state.errors = data;

@@ -13,7 +13,7 @@ axios.interceptors.request.use((request) => {
   //request.headers['Access-Control-Allow-Credentials'] = true;
   request.headers.common.Authorization = `Bearer ${store.state.user.token}`;
   request.headers.common.From = store.state.user.id;
-  //request.headers['User-Id'] = store.state.user.id;
+  request.headers['email'] = store.state.user.email;
   //console.log(request);
 
   //let params = new URLSearchParams();
@@ -38,7 +38,7 @@ axios.interceptors.request.use((request) => {
 } */
 
 const gauthOption = {
-  clientId: '225314601298-c3rtso3o9hpm5se1a30qoi2tu81p48cj.apps.googleusercontent.com',
+  clientId: '225314601298-c3rtso3o9hpm5se1a30qoi2tu81p48cj.apps.googleusercontent.com', // ToDo:
   scope: 'profile email',
   prompt: 'select_account'
 }

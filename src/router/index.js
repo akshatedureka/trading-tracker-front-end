@@ -17,23 +17,12 @@ const routes = [
     }
   },
   {
-    path: '/price-ladder',
-    name: 'PriceLadder',
+    path: '/account-management',
+    name: 'AccountManagement',
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "price-ladder" */ '../views/PriceLadder.vue'),
-    meta: {
-      auth: true
-    }
-  },
-  {
-    path: '/order-blocks',
-    name: 'OrderBlocks',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "order-blocks" */ '../views/OrderBlocks.vue'),
+    component: () => import(/* webpackChunkName: "account-management" */ '../views/AccountManagement.vue'),
     meta: {
       auth: true
     }

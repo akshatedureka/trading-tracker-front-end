@@ -34,45 +34,59 @@
           </v-list-item-icon>
           <v-list-item-title>Home</v-list-item-title>
         </v-list-item>
-        <!--         <v-list-item color="primary" to="/price-ladder">
+        <v-list-item color="primary" to="/account-management">
           <v-list-item-icon>
-            <v-icon>mdi-ladder</v-icon>
+            <v-icon>mdi-account</v-icon>
           </v-list-item-icon>
-          <v-list-item-title>Price Ladder</v-list-item-title>
+          <v-list-item-title>Account Management</v-list-item-title>
         </v-list-item>
-        <v-list-item color="primary" to="/order-blocks">
+        <v-list-item
+          v-if="$store.state.hasEnteredKeys"
+          color="primary"
+          to="/symbol-management"
+        >
           <v-list-item-icon>
-            <v-icon>mdi-layers-triple</v-icon>
-          </v-list-item-icon>
-          <v-list-item-title>Order Blocks</v-list-item-title>
-        </v-list-item> -->
-        <v-list-item color="primary" to="/symbol-management">
-          <v-list-item-icon>
-            <v-icon>mdi-layers-triple</v-icon>
+            <v-icon>mdi-playlist-edit</v-icon>
           </v-list-item-icon>
           <v-list-item-title>Symbol Management</v-list-item-title>
         </v-list-item>
-        <v-list-item color="primary" to="/block-management">
+        <v-list-item
+          v-if="$store.state.hasEnteredKeys && $store.state.accountType === 2"
+          color="primary"
+          to="/block-management"
+        >
           <v-list-item-icon>
-            <v-icon>mdi-layers-triple</v-icon>
+            <v-icon>mdi-layers-edit</v-icon>
           </v-list-item-icon>
           <v-list-item-title>Block Management</v-list-item-title>
         </v-list-item>
-        <v-list-item color="primary" to="/trade-management-swing">
+        <v-list-item
+          v-if="$store.state.hasEnteredKeys && $store.state.accountType === 2"
+          color="primary"
+          to="/trade-management-swing"
+        >
           <v-list-item-icon>
-            <v-icon>mdi-layers-triple</v-icon>
+            <v-icon>mdi-finance</v-icon>
           </v-list-item-icon>
           <v-list-item-title>Trade Management - Swing</v-list-item-title>
         </v-list-item>
-        <v-list-item color="primary" to="/trade-management-day">
+        <v-list-item
+          v-if="$store.state.hasEnteredKeys && $store.state.accountType === 1"
+          color="primary"
+          to="/trade-management-day"
+        >
           <v-list-item-icon>
-            <v-icon>mdi-layers-triple</v-icon>
+            <v-icon>mdi-finance</v-icon>
           </v-list-item-icon>
           <v-list-item-title>Trade Management - Day</v-list-item-title>
         </v-list-item>
-        <v-list-item color="primary" to="/block-archive">
+        <v-list-item
+          v-if="$store.state.hasEnteredKeys"
+          color="primary"
+          to="/block-archive"
+        >
           <v-list-item-icon>
-            <v-icon>mdi-layers-triple</v-icon>
+            <v-icon>mdi-layers-search</v-icon>
           </v-list-item-icon>
           <v-list-item-title>Block Archive</v-list-item-title>
         </v-list-item>
@@ -98,6 +112,7 @@ export default {
       isSignIn: false,
       drawer: false,
       group: null,
+      accountInformation: null,
       items: [
         {
           action: "mdi-wrench",
@@ -133,22 +148,30 @@ export default {
       try {
         const googleUser = await this.$gAuth.signIn();
         const userId = googleUser.ya;
+        const email = googleUser.dt.Ot;
         const token = googleUser.$b.id_token;
         console.log("user", googleUser);
         //this.isSignIn = this.$gAuth.isAuthorized;
         this.$store.commit("setAuthentication", this.$gAuth.isAuthorized);
-        this.$store.commit("setUser", {userId, token});
+        this.$store.commit("setUser", { userId, email, token });
         //googleUser.$b.id_token
         console.log(this.$store.state.user);
 
-        // create new user
         axios
-          .post("http://localhost:8080/api/CreateUser")
+          .get("http://localhost:8080/api/GetAccountInformation")
           .then((response) => {
-            this.response = response.data;
+            this.accountInformation = response.data;
+            this.$store.commit(
+              "setAccountType",
+              this.accountInformation.accountType
+            );
+            this.$store.commit(
+              "setHasEnteredKeys",
+              this.accountInformation.hasEnteredKeys
+            );
             this.displaySnack(
               "success",
-              "Successfully added user."
+              "Successfully retrieved account information."
             );
           })
           .catch((err) => {
@@ -156,7 +179,7 @@ export default {
               // Request made and server responded
               this.displaySnack(
                 "error",
-                "Error while creating new user. " + err.response.data
+                "Error while getting account information. " + err.response.data
               );
             } else if (err.request) {
               // The request was made but no response was received
@@ -181,6 +204,12 @@ export default {
       } catch (error) {
         // On fail do something
       }
+    },
+    displaySnack(color, text) {
+      this.snackColor = color;
+      this.snackText = text;
+      this.snack = true;
+      this.overlay = false;
     },
   },
   mounted() {
