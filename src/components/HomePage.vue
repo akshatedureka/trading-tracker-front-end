@@ -11,26 +11,13 @@
       </v-col>
 
       <v-col class="mb-4">
-        <h1 class="display-2 font-weight-bold mb-3">Trade Management System (TMS)</h1>
+        <h1 class="display-2 font-weight-bold mb-3">
+          Trade Management System (TMS)
+        </h1>
 
         <p class="subheading font-weight-regular">
-          Please refer to the links below or the navigation sidebar
+          Please sign in to access your account
         </p>
-      </v-col>
-
-      <v-col class="mb-5" cols="12">
-        <h2 class="headline font-weight-bold mb-3">Links</h2>
-
-        <v-row justify="center">
-          <router-link
-            v-for="(next, i) in links"
-            :key="i"
-            :to="next.to"
-            class="subheading mx-3"
-          >
-            {{ next.text }}
-          </router-link>
-        </v-row>
       </v-col>
     </v-row>
   </v-container>
@@ -40,29 +27,6 @@
 export default {
   name: "HomePage",
 
-  data: () => ({
-    links: [
-      {
-        text: 'Symbol Management',
-        to: '/symbol-management',
-      },
-      {
-        text: 'Block Management',
-        to: '/block-management',
-      },
-      {
-        text: 'Trade Management - Swing',
-        to: '/trade-management-swing',
-      },
-      {
-        text: 'Trade Management - Day',
-        to: '/trade-management-day',
-      },
-      {
-        text: 'Block Archives',
-        to: '/block-archive',
-      },
-    ],
-  }),
+  data: () => ({}),
 };
 </script>

@@ -46,11 +46,14 @@
                     :type="showAlpacaSecret ? 'text' : 'password'"
                     @click:append="showAlpacaSecret = !showAlpacaSecret"
                   ></v-text-field>
-                  <p>{{ accountType || "null" }}</p>
+                  <v-card color="red">
+                    <h4 class="pa-2" v-text=accountWarningText></h4>
+                  </v-card>
                   <v-radio-group
                     v-model="accountType"
                     mandatory
                     label="Account Type:"
+                    :disabled="hasEnteredKeys"
                   >
                     <v-radio label="Day" value="1"></v-radio>
                     <v-radio label="Swing" value="2"></v-radio>
@@ -93,6 +96,8 @@ export default {
       alpacaKey: "",
       alpacaSecret: "",
       accountType: "",
+      hasEnteredKeys: "",
+      accountWarningText: "Please note that once you set your account type, it cannot be changed.",
       returnUrl: null,
       errorMessage: null,
       successMessage: null,
@@ -114,6 +119,7 @@ export default {
         this.userId = this.accountInformation.userId;
         this.email = this.accountInformation.email;
         this.accountType = String(this.accountInformation.accountType);
+        this.hasEnteredKeys = this.accountInformation.hasEnteredKeys;
         this.alpacaKey = "HIDDEN";
         this.alpacaSecret = "HIDDEN";
       })
@@ -135,11 +141,7 @@ export default {
 
     this.waitingForAccountInfo = false;
   },
-  computed: {
-    hasEnteredKeys() {
-      return this.alpacaKey !== "" && this.alpacaSecret !== "";
-    },
-  },
+  computed: {},
   methods: {
     submit() {
       const headers = {
@@ -150,7 +152,6 @@ export default {
         .post(
           "http://localhost:8080/api/UpdateAccountInformation",
           {
-            hasEnteredKeys: this.hasEnteredKeys,
             accountType: this.accountType,
             alpacaKey: "testKey",
             alpacaSecret: "testSecret",

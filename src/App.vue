@@ -95,6 +95,11 @@
     <v-main class="grey lighten-3">
       <router-view></router-view>
     </v-main>
+    <v-footer color="primary lighten-1" padless>
+      <v-col class="text-center" cols="12">
+        {{ new Date().getFullYear() }} — <strong>Trade Management System (TMS)</strong>
+      </v-col>
+    </v-footer>
   </v-app>
 </template>
 
@@ -147,9 +152,9 @@ export default {
     async handleClickSignIn() {
       try {
         const googleUser = await this.$gAuth.signIn();
-        const userId = googleUser.ya;
-        const email = googleUser.dt.Ot;
-        const token = googleUser.$b.id_token;
+        const userId = googleUser.getId();
+        const email = googleUser.getBasicProfile().getEmail();
+        const token = googleUser.getAuthResponse().access_token;
         console.log("user", googleUser);
         //this.isSignIn = this.$gAuth.isAuthorized;
         this.$store.commit("setAuthentication", this.$gAuth.isAuthorized);
@@ -201,6 +206,11 @@ export default {
         //this.isSignIn = this.$gAuth.isAuthorized;
         console.log(this.$gAuth.isAuthorized);
         this.$store.commit("setAuthentication", this.$gAuth.isAuthorized);
+        const userId = "";
+        const email = "";
+        const token = "";
+        this.$store.commit("setUser", { userId, email, token });
+        this.$router.push("/");
       } catch (error) {
         // On fail do something
       }
