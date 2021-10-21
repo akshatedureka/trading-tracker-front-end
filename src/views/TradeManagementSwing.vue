@@ -23,6 +23,8 @@
         <template v-slot:item.trading="{ item }">
           <v-switch
             v-model="item.trading"
+            :loading="item.loading"
+            :disabled="item.loading"
             inset
             :label="getSwitchLabel(item.trading)"
             @click="switchTrading(item)"
@@ -53,6 +55,8 @@ export default {
   data() {
     return {
       dataLoading: true,
+      overlay: false,
+      loading: false,
       tradingData: [],
       response: "",
       switchTradeResponse: "",
@@ -70,19 +74,20 @@ export default {
       val || this.closeDelete();
     },
   },
-  mounted() { // ToDo: Disable symbols that do not have blocks created yet
+  mounted() {
+    // ToDo: Disable symbols that do not have blocks created yet
     axios
       .get("http://localhost:8080/api/GetTradingDataSwing")
       .then((response) => {
         this.tradingData = response.data;
-        this.dataLoading = false;
+        this.dataLoading = !this.dataLoading;
       });
   },
   computed: {
     headers() {
       return [
         { text: "Symbol", value: "symbol" },
-        { text: "Trading", value: "swingTrading" },
+        { text: "Trading", value: "trading" },
         { text: "Current Qty", value: "currentQuantity" },
         { text: "Open Position Profit", value: "currentProfit" },
         { text: "Closed Position Profit", value: "archiveProfit" },
@@ -108,6 +113,8 @@ export default {
     },
     switchTrading(item) {
       var symbol = item.symbol;
+      item.loading = !item.loading;
+      this.dataLoading = !this.dataLoading;
       if (item.trading) {
         axios
           .post(
@@ -123,9 +130,17 @@ export default {
               .post("http://localhost:8080/api/UpdateTradingSymbol", {
                 id: item.symbolId,
                 name: item.symbol,
-                trading: item.trading,
+                swingTrading: item.trading,
               })
-              .then((response) => (this.updateSymbolResponse = response.data))
+              .then((response) => {
+                this.dataLoading = !this.dataLoading;
+                item.loading = !item.loading;
+                this.updateSymbolResponse = response.data;
+                this.displaySnack(
+                  "success",
+                  "Successfully activated trading for " + symbol + "."
+                );
+              })
               .catch((err) => {
                 if (err.response) {
                   // Request made and server responded
@@ -140,6 +155,8 @@ export default {
                   // Something happened in setting up the request that triggered an Error
                   console.log("Error", err.message);
                 }
+                this.dataLoading = !this.dataLoading;
+                item.loading = !item.loading;
               });
           })
           .catch((err) => {
@@ -157,6 +174,8 @@ export default {
               // Something happened in setting up the request that triggered an Error
               console.log("Error", err.message);
             }
+            this.dataLoading = !this.dataLoading;
+            item.loading = !item.loading;
           });
       } else {
         axios
@@ -171,7 +190,11 @@ export default {
                 name: item.symbol,
                 trading: item.trading,
               })
-              .then((response) => (this.updateSymbolResponse = response.data))
+              .then((response) => {
+                this.dataLoading = !this.dataLoading;
+                item.loading = !item.loading;
+                this.updateSymbolResponse = response.data;
+              })
               .catch((err) => {
                 if (err.response) {
                   // Request made and server responded
@@ -186,6 +209,8 @@ export default {
                   // Something happened in setting up the request that triggered an Error
                   console.log("Error", err.message);
                 }
+                this.dataLoading = !this.dataLoading;
+                item.loading = !item.loading;
               });
           })
           .catch((err) => {
@@ -202,6 +227,8 @@ export default {
               // Something happened in setting up the request that triggered an Error
               console.log("Error", err.message);
             }
+            this.dataLoading = !this.dataLoading;
+            item.loading = !item.loading;
           });
       }
     },
