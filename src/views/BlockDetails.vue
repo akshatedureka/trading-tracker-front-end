@@ -29,21 +29,25 @@
               <template v-slot:item.buyOrderCreated="{ item }">
                 <v-simple-checkbox
                   v-model="item.buyOrderCreated"
+                  disabled
                 ></v-simple-checkbox>
               </template>
-              <template v-slot:item.buyOrderExecuted="{ item }">
+              <template v-slot:item.buyOrderFilled="{ item }">
                 <v-simple-checkbox
-                  v-model="item.buyOrderExecuted"
+                  v-model="item.buyOrderFilled"
+                  disabled
                 ></v-simple-checkbox>
               </template>
               <template v-slot:item.sellOrderCreated="{ item }">
                 <v-simple-checkbox
                   v-model="item.sellOrderCreated"
+                  disabled
                 ></v-simple-checkbox>
               </template>
-              <template v-slot:item.sellOrderExecuted="{ item }">
+              <template v-slot:item.sellOrderFilled="{ item }">
                 <v-simple-checkbox
-                  v-model="item.sellOrderExecuted"
+                  v-model="item.sellOrderFilled"
+                  disabled
                 ></v-simple-checkbox>
               </template>
               <!--             <template v-slot:item="{ item }">
@@ -97,14 +101,13 @@ export default {
   computed: {
     headers() {
       return [
-        { text: "Num Shares", value: "numShares" },
         { text: "Buy Order", value: "buyOrderCreated" },
         { text: "Buy Order Price", value: "buyOrderPrice" },
-        { text: "Buy Order Executed", value: "buyOrderExecuted" },
+        { text: "Buy Order Filled", value: "buyOrderFilled" },
         { text: "Executed Buy Price", value: "executedBuyPrice" },
         { text: "Sell Order", value: "sellOrderCreated" },
         { text: "Sell Order Price", value: "sellOrderPrice" },
-        { text: "Sell Order Executed", value: "sellOrderExecuted" },
+        { text: "Sell Order Filled", value: "sellOrderFilled" },
         { text: "Stop Loss Price", value: "stopLossOrderPrice" },
       ];
     },
@@ -113,7 +116,7 @@ export default {
     itemRowBackground: function (item) {
       if (item.sellOrderCreated) {
         return "red";
-      } else if (item.buyOrderExecuted) {
+      } else if (item.buyOrderFilled) {
         return "green";
       } else if (item.buyOrderCreated) {
         return "blue";
