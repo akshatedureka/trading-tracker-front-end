@@ -112,6 +112,7 @@ export default {
   },
   mounted() {
     this.waitingForAccountInfo = true;
+    this.overlay = true;
     axios
       .get("http://localhost:8080/api/GetAccountInformation")
       .then((response) => {
@@ -120,8 +121,13 @@ export default {
         this.email = this.accountInformation.email;
         this.accountType = String(this.accountInformation.accountType);
         this.hasEnteredKeys = this.accountInformation.hasEnteredKeys;
-        this.alpacaKey = "HIDDEN";
-        this.alpacaSecret = "HIDDEN";
+        if (this.hasEnteredKeys)
+        {
+          this.alpacaKey = "HIDDEN";
+          this.alpacaSecret = "HIDDEN";
+        }
+
+        this.overlay = false;
       })
       .catch((err) => {
         if (err.response) {
@@ -137,6 +143,7 @@ export default {
           // Something happened in setting up the request that triggered an Error
           console.log("Error", err.message);
         }
+        this.overlay = false;
       });
 
     this.waitingForAccountInfo = false;
@@ -144,6 +151,7 @@ export default {
   computed: {},
   methods: {
     submit() {
+      this.overlay = true;
       const headers = {
         alpacaKey: this.alpacaKey,
         alpacaSecret: this.alpacaSecret,
@@ -163,6 +171,7 @@ export default {
         .then((response) => {
           this.$store.commit("setAccountType", response.data.accountType);
           this.$store.commit("setHasEnteredKeys", response.data.hasEnteredKeys);
+          this.overlay = false;
           this.displaySnack(
             "success",
             "Successfully updated account information."
@@ -182,6 +191,7 @@ export default {
             // Something happened in setting up the request that triggered an Error
             console.log("Error", err.message);
           }
+          this.overlay = false;
         });
     },
     displaySnack(color, text) {
