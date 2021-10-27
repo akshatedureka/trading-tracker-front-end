@@ -71,7 +71,7 @@
           <v-list-item-title>Trade Management - Swing</v-list-item-title>
         </v-list-item>
         <v-list-item
-          v-if="$store.state.hasEnteredKeys && $store.state.accountType === 1"
+          v-if="$store.state.hasEnteredKeys && $store.state.accountType !== 2"
           color="primary"
           to="/trade-management-day"
         >
@@ -89,6 +89,16 @@
             <v-icon>mdi-layers-search</v-icon>
           </v-list-item-icon>
           <v-list-item-title>Block Archive</v-list-item-title>
+        </v-list-item>
+      <v-list-item
+          v-if="$store.state.hasEnteredKeys"
+          color="primary"
+          to="/block-comparison"
+        >
+          <v-list-item-icon>
+            <v-icon>mdi-layers-search</v-icon>
+          </v-list-item-icon>
+          <v-list-item-title>Block Comparison</v-list-item-title>
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
