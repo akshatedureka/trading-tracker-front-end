@@ -28,12 +28,23 @@ const routes = [
     }
   },
   {
-    path: '/symbol-management',
-    name: 'SymbolManagement',
+    path: '/symbol-management-swing',
+    name: 'SymbolManagementSwing',
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "symbol-management" */ '../views/SymbolManagement.vue'),
+    component: () => import(/* webpackChunkName: "symbol-management" */ '../views/SymbolManagementSwing.vue'),
+    meta: {
+      auth: true
+    }
+  },
+  {
+    path: '/symbol-management-day',
+    name: 'SymbolManagementDay',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () => import(/* webpackChunkName: "symbol-management" */ '../views/SymbolManagementDay.vue'),
     meta: {
       auth: true
     }
