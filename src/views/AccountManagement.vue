@@ -55,8 +55,10 @@
                     label="Account Type:"
                     :disabled="hasEnteredKeys"
                   >
-                    <v-radio label="Day" value="1"></v-radio>
-                    <v-radio label="Swing" value="2"></v-radio>
+                    <v-radio label="Swing (Long)" value="1"></v-radio>
+                    <v-radio label="Swing (Short)" value="2"></v-radio>
+                    <v-radio label="Day (Long)" value="3"></v-radio>
+                    <v-radio label="Day (Short)" value="4"></v-radio>
                   </v-radio-group>
                   <v-btn
                     :disabled="!valid"

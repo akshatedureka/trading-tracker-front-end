@@ -115,15 +115,16 @@ export default {
       var symbol = item.symbol;
       item.loading = !item.loading;
       this.dataLoading = !this.dataLoading;
+      var createOrdersUrl =
+        this.$store.state.accountType === 2
+          ? "http://localhost:8080/api/CreateInitialSellOrdersFromSymbol"
+          : "http://localhost:8080/api/CreateInitialBuyOrdersFromSymbol";
+
       if (item.trading) {
         axios
-          .post(
-            "http://localhost:8080/api/CreateInitialBuyOrdersFromSymbol",
-            null,
-            {
-              params: { symbol },
-            }
-          )
+          .post(createOrdersUrl, null, {
+            params: { symbol },
+          })
           .then((response) => {
             this.switchTradeResponse = response.data;
             axios

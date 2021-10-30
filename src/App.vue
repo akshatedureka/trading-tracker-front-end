@@ -51,7 +51,7 @@
           <v-list-item-title>Symbol Management</v-list-item-title>
         </v-list-item>
         <v-list-item
-          v-if="$store.state.hasEnteredKeys && $store.state.accountType === 2"
+          v-if="$store.state.hasEnteredKeys && $store.state.accountType === 1 || $store.state.accountType === 2"
           color="primary"
           to="/block-management"
         >
@@ -61,7 +61,7 @@
           <v-list-item-title>Block Management</v-list-item-title>
         </v-list-item>
         <v-list-item
-          v-if="$store.state.hasEnteredKeys && $store.state.accountType === 2"
+          v-if="$store.state.hasEnteredKeys && $store.state.accountType === 1 || $store.state.accountType === 2"
           color="primary"
           to="/trade-management-swing"
         >
@@ -71,7 +71,7 @@
           <v-list-item-title>Trade Management - Swing</v-list-item-title>
         </v-list-item>
         <v-list-item
-          v-if="$store.state.hasEnteredKeys && $store.state.accountType !== 2"
+          v-if="$store.state.hasEnteredKeys && $store.state.accountType === 3 || $store.state.accountType === 4"
           color="primary"
           to="/trade-management-day"
         >
