@@ -6,6 +6,9 @@
         <v-toolbar-title>Trade Management System (TMS)</v-toolbar-title>
       </router-link>
       <v-spacer></v-spacer>
+      <v-chip v-if="$store.state.authenticated" class="mr-5" color="blue">
+        {{ $store.state.user.email }}</v-chip
+      >
       <v-btn
         color="blue darken-1"
         @click="handleClickSignIn"
