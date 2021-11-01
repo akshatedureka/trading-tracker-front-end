@@ -107,7 +107,7 @@ export default {
           .post("http://localhost:8080/api/UpdateTradingSymbol", {
             id: item.symbolId,
             name: item.symbol,
-            dayTrading: item.trading,
+            trading: item.trading,
           })
           .then((response) => (this.updateSymbolResponse = response.data))
           .catch((err) => {
@@ -136,7 +136,7 @@ export default {
               .post("http://localhost:8080/api/UpdateTradingSymbol", {
                 id: item.symbolId,
                 name: item.symbol,
-                dayTrading: item.trading,
+                trading: item.trading,
               })
               .then((response) => (this.updateSymbolResponse = response.data))
               .catch((err) => {

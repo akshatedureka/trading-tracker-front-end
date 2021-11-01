@@ -160,7 +160,7 @@ export default {
   },
   mounted() {
     axios
-      .get(process.env.VUE_APP_API_ENDPOINT_URL + "/GetTradingSymbolsDay")
+      .get(process.env.VUE_APP_API_ENDPOINT_URL + "/GetTradingSymbols")
       .then((response) => {
         this.symbols = response.data;
         this.dataLoading = false;
@@ -227,7 +227,7 @@ export default {
       this.overlay = true;
       var symbol = this.editedItem.name;
       axios
-        .delete("http://localhost:8080/api/DeleteTradingSymbolDay", {
+        .delete("http://localhost:8080/api/DeleteTradingSymbol", {
           params: { symbol },
         })
         .then((response) => {
@@ -277,7 +277,7 @@ export default {
       if (this.editedIndex > -1) {
         // edit
         axios
-          .post("http://localhost:8080/api/UpdateTradingSymbolDay", {
+          .post("http://localhost:8080/api/UpdateTradingSymbol", {
             id: this.editedItem.id,
             active: this.editedItem.active,
             name: this.editedItem.name,
@@ -311,7 +311,7 @@ export default {
       } else {
         // create new
         axios
-          .post("http://localhost:8080/api/CreateTradingSymbolDay", {
+          .post("http://localhost:8080/api/CreateTradingSymbol", {
             name: this.editedItem.name,
             active: this.editedItem.active,
             numShares: this.editedItem.numShares,

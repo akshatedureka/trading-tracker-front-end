@@ -131,7 +131,7 @@ export default {
               .post("http://localhost:8080/api/UpdateTradingSymbol", {
                 id: item.symbolId,
                 name: item.symbol,
-                swingTrading: item.trading,
+                trading: item.trading,
               })
               .then((response) => {
                 this.dataLoading = !this.dataLoading;

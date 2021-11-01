@@ -254,7 +254,6 @@ export default {
         axios
           .post("http://localhost:8080/api/UpdateTradingSymbol", {
             id: this.editedItem.id,
-            oldName: this.symbols[symbolIndex].name,
             name: this.editedItem.name,
             active: this.editedItem.active,
           })
@@ -284,8 +283,9 @@ export default {
       } else {
         // create new
         axios
-          .post("http://localhost:8080/api/CreateTradingSymbol", null, {
-            params: { symbol },
+          .post("http://localhost:8080/api/CreateTradingSymbol", {
+            name: this.editedItem.name,
+            active: this.editedItem.active,
           })
           .then((response) => {
             this.response = response.data;
