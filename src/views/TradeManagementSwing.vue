@@ -128,7 +128,7 @@ export default {
           .then((response) => {
             this.switchTradeResponse = response.data;
             axios
-              .post("http://localhost:8080/api/UpdateTradingSymbol", {
+              .post("http://localhost:8080/api/UpdateTradingStatus", {
                 id: item.symbolId,
                 name: item.symbol,
                 trading: item.trading,
@@ -186,7 +186,7 @@ export default {
           .then((response) => {
             this.switchTradeResponse = response.data;
             axios
-              .post("http://localhost:8080/api/UpdateTradingSymbol", {
+              .post("http://localhost:8080/api/UpdateTradingStatus", {
                 id: item.symbolId,
                 name: item.symbol,
                 trading: item.trading,
