@@ -195,6 +195,10 @@ export default {
                 this.dataLoading = !this.dataLoading;
                 item.loading = !item.loading;
                 this.updateSymbolResponse = response.data;
+                this.displaySnack(
+                  "success",
+                  "Successfully deactivated trading for " + symbol + "."
+                );
               })
               .catch((err) => {
                 if (err.response) {
