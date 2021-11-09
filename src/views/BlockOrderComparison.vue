@@ -104,6 +104,8 @@ export default {
         { text: "Buy Order Filled Price", value: "buyOrderFilledPrice" },
         { text: "Sell Order Created", value: "sellOrderCreated" },
         { text: "Sell Order Id", value: "externalSellOrderId" },
+        { text: "Sell Order Filled", value: "sellOrderFilled" },
+        { text: "Sell Order Filled Price", value: "sellOrderFilledPrice" },
         { text: "Has Discrepancy", value: "hasDiscrepancy" },
       ];
     },
