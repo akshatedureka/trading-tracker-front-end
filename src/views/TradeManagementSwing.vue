@@ -115,58 +115,29 @@ export default {
       var symbol = item.symbol;
       item.loading = !item.loading;
       this.dataLoading = !this.dataLoading;
-      var createOrdersUrl =
-        this.$store.state.accountType === 2
-          ? "http://localhost:8080/api/CreateInitialSellOrdersFromSymbol"
-          : "http://localhost:8080/api/CreateInitialBuyOrdersFromSymbol";
 
       if (item.trading) {
         axios
-          .post(createOrdersUrl, null, {
-            params: { symbol },
+          .post("http://localhost:8080/api/UpdateTradingStatus", {
+            id: item.symbolId,
+            name: item.symbol,
+            trading: item.trading,
           })
           .then((response) => {
-            this.switchTradeResponse = response.data;
-            axios
-              .post("http://localhost:8080/api/UpdateTradingStatus", {
-                id: item.symbolId,
-                name: item.symbol,
-                trading: item.trading,
-              })
-              .then((response) => {
-                this.dataLoading = !this.dataLoading;
-                item.loading = !item.loading;
-                this.updateSymbolResponse = response.data;
-                this.displaySnack(
-                  "success",
-                  "Successfully activated trading for " + symbol + "."
-                );
-              })
-              .catch((err) => {
-                if (err.response) {
-                  // Request made and server responded
-                  this.displaySnack(
-                    "error",
-                    "Error while updating trading symbol. " + err.response.data
-                  );
-                } else if (err.request) {
-                  // The request was made but no response was received
-                  console.log(err.request);
-                } else {
-                  // Something happened in setting up the request that triggered an Error
-                  console.log("Error", err.message);
-                }
-                this.dataLoading = !this.dataLoading;
-                item.loading = !item.loading;
-              });
+            this.dataLoading = !this.dataLoading;
+            item.loading = !item.loading;
+            this.updateSymbolResponse = response.data;
+            this.displaySnack(
+              "success",
+              "Successfully activated trading for " + symbol + "."
+            );
           })
           .catch((err) => {
             if (err.response) {
               // Request made and server responded
               this.displaySnack(
                 "error",
-                "Error while creating buy orders for symbol. " +
-                  err.response.data
+                "Error while activating trading. " + err.response.data
               );
             } else if (err.request) {
               // The request was made but no response was received
