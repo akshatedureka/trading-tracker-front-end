@@ -151,50 +151,24 @@ export default {
           });
       } else {
         axios
-          .post("http://localhost:8080/api/CloseOpenPosition", null, {
+          .post("http://localhost:8080/api/StopTrading", null, {
             params: { symbol },
           })
           .then((response) => {
-            this.switchTradeResponse = response.data;
-            axios
-              .post("http://localhost:8080/api/UpdateTradingStatus", {
-                id: item.symbolId,
-                name: item.symbol,
-                trading: item.trading,
-              })
-              .then((response) => {
-                this.dataLoading = !this.dataLoading;
-                item.loading = !item.loading;
-                this.updateSymbolResponse = response.data;
-                this.displaySnack(
-                  "success",
-                  "Successfully deactivated trading for " + symbol + "."
-                );
-              })
-              .catch((err) => {
-                if (err.response) {
-                  // Request made and server responded
-                  this.displaySnack(
-                    "error",
-                    "Error while updating trading symbol. " + err.response.data
-                  );
-                } else if (err.request) {
-                  // The request was made but no response was received
-                  console.log(err.request);
-                } else {
-                  // Something happened in setting up the request that triggered an Error
-                  console.log("Error", err.message);
-                }
-                this.dataLoading = !this.dataLoading;
-                item.loading = !item.loading;
-              });
+            this.dataLoading = !this.dataLoading;
+            item.loading = !item.loading;
+            this.updateSymbolResponse = response.data;
+            this.displaySnack(
+              "success",
+              "Successfully deactivated trading for " + symbol + "."
+            );
           })
           .catch((err) => {
             if (err.response) {
               // Request made and server responded
               this.displaySnack(
                 "error",
-                "Error while closing open positions. " + err.response.data
+                "Error while deactivating trading. " + err.response.data
               );
             } else if (err.request) {
               // The request was made but no response was received
