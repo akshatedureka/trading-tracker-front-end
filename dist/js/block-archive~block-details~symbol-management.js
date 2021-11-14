@@ -1,4 +1,4 @@
-(window["webpackJsonp"] = window["webpackJsonp"] || []).push([["block-details~order-blocks~symbol-management"],{
+(window["webpackJsonp"] = window["webpackJsonp"] || []).push([["block-archive~block-details~symbol-management"],{
 
 /***/ "./node_modules/css-loader/dist/cjs.js?!./node_modules/postcss-loader/src/index.js?!./node_modules/sass-loader/dist/cjs.js?!./node_modules/vuetify/src/components/VCard/VCard.sass":
 /*!***********************************************************************************************************************************************************************************************************************************!*\

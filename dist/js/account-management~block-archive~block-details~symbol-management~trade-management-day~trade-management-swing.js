@@ -1,4 +1,4 @@
-(window["webpackJsonp"] = window["webpackJsonp"] || []).push([["block-details~order-blocks~symbol-management~trade-management-day~trade-management-swing"],{
+(window["webpackJsonp"] = window["webpackJsonp"] || []).push([["account-management~block-archive~block-details~symbol-management~trade-management-day~trade-management-swing"],{
 
 /***/ "./node_modules/css-loader/dist/cjs.js?!./node_modules/postcss-loader/src/index.js?!./node_modules/sass-loader/dist/cjs.js?!./node_modules/vuetify/src/styles/components/_selection-controls.sass":
 /*!**************************************************************************************************************************************************************************************************************************************************!*\
