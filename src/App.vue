@@ -202,7 +202,7 @@ export default {
         console.log(this.$store.state.user);
 
         axios
-          .get("http://localhost:8080/api/GetAccountInformation")
+          .get(process.env.VUE_APP_API_ENDPOINT_URL + "/GetAccountInformation")
           .then((response) => {
             this.accountInformation = response.data;
             this.$store.commit(

@@ -116,7 +116,7 @@ export default {
     this.waitingForAccountInfo = true;
     this.overlay = true;
     axios
-      .get("http://localhost:8080/api/GetAccountInformation")
+      .get(process.env.VUE_APP_API_ENDPOINT_URL + "/GetAccountInformation")
       .then((response) => {
         this.accountInformation = response.data;
         this.userId = this.accountInformation.userId;
