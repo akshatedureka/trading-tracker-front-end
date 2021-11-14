@@ -89,8 +89,9 @@ export default {
         { text: "Symbol", value: "symbol" },
         { text: "Trading", value: "trading" },
         { text: "Current Qty", value: "currentQuantity" },
-        { text: "Open Position Profit", value: "currentProfit" },
-        { text: "Closed Position Profit", value: "archiveProfit" },
+        { text: "Open Position Profit", value: "openProfit" },
+        { text: "Closed Position Profit", value: "closedProfit" },
+        { text: "Condensed Profit", value: "condensedProfit" },
         { text: "Total Profit", value: "totalProfit" },
       ];
     },
