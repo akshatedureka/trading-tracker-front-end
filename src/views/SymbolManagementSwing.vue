@@ -202,7 +202,7 @@ export default {
       this.overlay = true;
       var symbol = this.editedItem.name;
       axios
-        .delete("http://localhost:8080/api/DeleteTradingSymbol", {
+        .delete(process.env.VUE_APP_API_ENDPOINT_URL + "/DeleteTradingSymbol", {
           params: { symbol },
         })
         .then((response) => {
@@ -252,7 +252,7 @@ export default {
       if (this.editedIndex > -1) {
         // edit
         axios
-          .post("http://localhost:8080/api/UpdateTradingSymbol", {
+          .post(process.env.VUE_APP_API_ENDPOINT_URL + "/UpdateTradingSymbol", {
             id: this.editedItem.id,
             name: this.editedItem.name,
             active: this.editedItem.active,
@@ -283,7 +283,7 @@ export default {
       } else {
         // create new
         axios
-          .post("http://localhost:8080/api/CreateTradingSymbol", {
+          .post(process.env.VUE_APP_API_ENDPOINT_URL + "/CreateTradingSymbol", {
             name: this.editedItem.name,
             active: this.editedItem.active,
           })
