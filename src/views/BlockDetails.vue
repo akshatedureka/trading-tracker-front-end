@@ -87,7 +87,7 @@ export default {
   mounted() {
     var symbol = this.$route.params.symbol;
     axios
-      .get("http://localhost:8080/api/GetBlocksFromLadder", {
+      .get(process.env.VUE_APP_API_ENDPOINT_URL + "/GetBlocksFromLadder", {
         params: { symbol },
       })
       .then((response) => {

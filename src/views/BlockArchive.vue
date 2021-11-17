@@ -79,7 +79,7 @@ export default {
     };
   },
   mounted() {
-    axios.get("http://localhost:8080/api/GetBlockArchives").then((response) => {
+    axios.get(process.env.VUE_APP_API_ENDPOINT_URL + "/GetBlockArchives").then((response) => {
       this.blocks = response.data;
       this.dataLoading = false;
     });

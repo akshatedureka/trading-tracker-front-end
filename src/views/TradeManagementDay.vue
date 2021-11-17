@@ -72,7 +72,7 @@ export default {
   },
   mounted() {
     axios
-      .get("http://localhost:8080/api/GetTradingDataDay")
+      .get(process.env.VUE_APP_API_ENDPOINT_URL + "/GetTradingDataDay")
       .then((response) => {
         this.tradingData = response.data;
         this.dataLoading = false;
@@ -104,7 +104,7 @@ export default {
       var symbol = item.symbol;
       if (item.trading) {
         axios
-          .post("http://localhost:8080/api/UpdateTradingStatus", {
+          .post(process.env.VUE_APP_API_ENDPOINT_URL + "/UpdateTradingStatus", {
             id: item.symbolId,
             name: item.symbol,
             trading: item.trading,
@@ -127,13 +127,13 @@ export default {
           });
       } else {
 /*         axios
-          .post("http://localhost:8080/api/CloseOpenPosition", null, {
+          .post(process.env.VUE_APP_API_ENDPOINT_URL + "/CloseOpenPosition", null, {
             params: { symbol },
           })
           .then((response) => {
             this.switchTradeResponse = response.data; */
             axios
-              .post("http://localhost:8080/api/UpdateTradingStatus", {
+              .post(process.env.VUE_APP_API_ENDPOINT_URL + "/UpdateTradingStatus", {
                 id: item.symbolId,
                 name: item.symbol,
                 trading: item.trading,

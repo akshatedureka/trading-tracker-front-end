@@ -225,7 +225,7 @@ export default {
   },
   mounted() {
     axios
-      .get("http://localhost:8080/api/GetTradingSymbols")
+      .get(process.env.VUE_APP_API_ENDPOINT_URL + "/GetTradingSymbols")
       .then((response) => {
         this.symbols = response.data;
         this.dataLoading = false;
@@ -234,7 +234,7 @@ export default {
         this.displaySnack("error", "Error while getting symbols. " + err);
       });
     axios
-      .get("http://localhost:8080/api/GetLadders")
+      .get(process.env.VUE_APP_API_ENDPOINT_URL + "/GetLadders")
       .then((response) => {
         if (response.data.length > 0) {
           this.ladders = response.data;
@@ -299,7 +299,7 @@ export default {
       this.overlay = true;
       var symbol = this.editedItem.symbol;
       axios
-        .delete("http://localhost:8080/api/DeleteLadder", {
+        .delete(process.env.VUE_APP_API_ENDPOINT_URL + "/DeleteLadder", {
           params: { symbol },
         })
         .then((response) => {
@@ -346,7 +346,7 @@ export default {
       if (this.editedIndex > -1) {
         // edit
         axios
-          .post("http://localhost:8080/api/UpdateLadder", {
+          .post(process.env.VUE_APP_API_ENDPOINT_URL + "/UpdateLadder", {
             id: this.editedItem.id,
             symbol: ladderSymbol,
             initialNumShares: this.editedItem.initialNumShares,
@@ -380,7 +380,7 @@ export default {
       } else {
         // create new
         axios
-          .post("http://localhost:8080/api/CreateLadder", {
+          .post(process.env.VUE_APP_API_ENDPOINT_URL + "/CreateLadder", {
             symbol: ladderSymbol,
             initialNumShares: this.editedItem.initialNumShares,
             buyPercentage: this.editedItem.buyPercentage,
@@ -424,7 +424,7 @@ export default {
       var ladderIndex = this.ladders.indexOf(item);
 
       axios
-        .post("http://localhost:8080/api/CreateBlocksFromLadder", {
+        .post(process.env.VUE_APP_API_ENDPOINT_URL + "/CreateBlocksFromLadder", {
           id: item.id,
           symbol: symbol,
           initialNumShares: item.initialNumShares,
@@ -464,7 +464,7 @@ export default {
       var ladderIndex = this.ladders.indexOf(item);
 
       axios
-        .delete("http://localhost:8080/api/DeleteBlocksFromLadder", {
+        .delete(process.env.VUE_APP_API_ENDPOINT_URL + "/DeleteBlocksFromLadder", {
           data: {
             id: item.id,
             symbol: symbol,

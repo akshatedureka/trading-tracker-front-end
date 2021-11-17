@@ -160,7 +160,7 @@ export default {
       };
       axios
         .post(
-          "http://localhost:8080/api/UpdateAccountInformation",
+          process.env.VUE_APP_API_ENDPOINT_URL + "/UpdateAccountInformation",
           {
             accountType: this.accountType,
             alpacaKey: "testKey",

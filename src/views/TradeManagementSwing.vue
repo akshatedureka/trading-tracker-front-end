@@ -77,7 +77,7 @@ export default {
   mounted() {
     // ToDo: Disable symbols that do not have blocks created yet
     axios
-      .get("http://localhost:8080/api/GetTradingDataSwing")
+      .get(process.env.VUE_APP_API_ENDPOINT_URL + "/GetTradingDataSwing")
       .then((response) => {
         this.tradingData = response.data;
         this.dataLoading = !this.dataLoading;
@@ -119,7 +119,7 @@ export default {
 
       if (item.trading) {
         axios
-          .post("http://localhost:8080/api/UpdateTradingStatus", {
+          .post(process.env.VUE_APP_API_ENDPOINT_URL + "/UpdateTradingStatus", {
             id: item.symbolId,
             name: item.symbol,
             trading: item.trading,
@@ -152,7 +152,7 @@ export default {
           });
       } else {
         axios
-          .post("http://localhost:8080/api/StopTrading", null, {
+          .post(process.env.VUE_APP_API_ENDPOINT_URL + "/StopTrading", null, {
             params: { symbol },
           })
           .then((response) => {
