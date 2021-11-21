@@ -45,6 +45,7 @@
                           item-value="name"
                           label="Symbol"
                           ref="symbolName"
+                          :disabled="editedIndex !== -1"
                         ></v-select>
                       </v-col>
                       <v-col cols="12" sm="4" md="4">
@@ -279,9 +280,13 @@ export default {
       return this.editedIndex === -1 ? "New Ladder" : "Edit Ladder";
     },
     availableSymbols() {
-      return this.symbols.filter(
-        (ar) => !this.ladders.find((rm) => rm.symbol === ar.name)
-      );
+      return this.editedIndex === -1
+        ? this.symbols.filter(
+            (ar) => !this.ladders.find((rm) => rm.symbol === ar.name)
+          )
+        : this.symbols.filter((ar) =>
+            this.ladders.find((rm) => rm.symbol === this.editedItem.symbol)
+          );
     },
   },
   methods: {
@@ -424,14 +429,17 @@ export default {
       var ladderIndex = this.ladders.indexOf(item);
 
       axios
-        .post(process.env.VUE_APP_API_ENDPOINT_URL + "/CreateBlocksFromLadder", {
-          id: item.id,
-          symbol: symbol,
-          initialNumShares: item.initialNumShares,
-          buyPercentage: item.buyPercentage,
-          sellPercentage: item.sellPercentage,
-          stopLossPercentage: item.stopLossPercentage,
-        })
+        .post(
+          process.env.VUE_APP_API_ENDPOINT_URL + "/CreateBlocksFromLadder",
+          {
+            id: item.id,
+            symbol: symbol,
+            initialNumShares: item.initialNumShares,
+            buyPercentage: item.buyPercentage,
+            sellPercentage: item.sellPercentage,
+            stopLossPercentage: item.stopLossPercentage,
+          }
+        )
         .then((response) => {
           this.ladders = response.data.ladders;
           this.displaySnack(
@@ -464,12 +472,15 @@ export default {
       var ladderIndex = this.ladders.indexOf(item);
 
       axios
-        .delete(process.env.VUE_APP_API_ENDPOINT_URL + "/DeleteBlocksFromLadder", {
-          data: {
-            id: item.id,
-            symbol: symbol,
-          },
-        })
+        .delete(
+          process.env.VUE_APP_API_ENDPOINT_URL + "/DeleteBlocksFromLadder",
+          {
+            data: {
+              id: item.id,
+              symbol: symbol,
+            },
+          }
+        )
         .then((response) => {
           this.ladders = response.data.ladders;
           this.displaySnack(
