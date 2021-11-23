@@ -70,6 +70,7 @@
 
 <script>
 import axios from "axios";
+import store from '@/store';
 
 export default {
   name: "BlockOrderComparison",
@@ -96,28 +97,42 @@ export default {
   },
   computed: {
     headers() {
-      return [
-        { text: "Block Id", value: "blockId" },
-        { text: "Buy Order Created", value: "buyOrderCreated" },
-        { text: "Buy Order Id", value: "externalBuyOrderId" },
-        { text: "Buy Order Filled", value: "buyOrderFilled" },
-        { text: "Buy Order Filled Price", value: "buyOrderFilledPrice" },
-        { text: "Sell Order Created", value: "sellOrderCreated" },
-        { text: "Sell Order Id", value: "externalSellOrderId" },
-        { text: "Sell Order Filled", value: "sellOrderFilled" },
-        { text: "Sell Order Filled Price", value: "sellOrderFilledPrice" },
-        { text: "Has Discrepancy", value: "hasDiscrepancy" },
-      ];
+      if (store.state.accountType === 1)
+      {
+        return [
+          { text: "Symbol", value: "symbol" },
+          { text: "Block Id", value: "blockId" },
+          { text: "Buy Order Created", value: "buyOrderCreated" },
+          { text: "Buy Order Price", value: "buyOrderPrice" },
+          { text: "Buy Order Id", value: "externalBuyOrderId" },
+          { text: "Buy Order Filled", value: "buyOrderFilled" },
+          { text: "Buy Order Filled Price", value: "buyOrderFilledPrice" },
+          { text: "Sell Order Created", value: "sellOrderCreated" },
+          { text: "Sell Order Price", value: "sellOrderPrice" },
+          { text: "Sell Order Id", value: "externalSellOrderId" }
+        ];
+      }
+      else
+      {
+        return [
+          { text: "Symbol", value: "symbol" },
+          { text: "Block Id", value: "blockId" },
+          { text: "Buy Order Created", value: "buyOrderCreated" },
+          { text: "Buy Order Price", value: "buyOrderPrice" },
+          { text: "Buy Order Id", value: "externalBuyOrderId" },
+          { text: "Sell Order Created", value: "sellOrderCreated" },
+          { text: "Sell Order Price", value: "sellOrderPrice" },
+          { text: "Sell Order Id", value: "externalSellOrderId" },
+          { text: "Sell Order Filled", value: "sellOrderFilled" },
+          { text: "Sell Order Filled Price", value: "sellOrderFilledPrice" }
+        ];
+      }
     },
   },
   methods: {
     itemRowBackground: function (item) {
-      if (item.sellOrderCreated) {
-        return "red";
-      } else if (item.buyOrderFilled) {
-        return "green";
-      } else if (item.buyOrderCreated) {
-        return "blue";
+      if (item.hasDiscrepancy) {
+        return "yellow";
       }
     },
     displaySnack(color, text) {
