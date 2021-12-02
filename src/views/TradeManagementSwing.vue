@@ -6,6 +6,7 @@
         :items="tradingData"
         :loading="dataLoading"
         loading-text="Loading... Please wait"
+        no-data-text="No symbols or ladders have been created yet."
         class="elevation-1"
       >
         <template v-slot:top>
@@ -75,11 +76,29 @@ export default {
     },
   },
   mounted() {
-    // ToDo: Disable symbols that do not have blocks created yet
     axios
       .get(process.env.VUE_APP_API_ENDPOINT_URL + "/GetTradingDataSwing")
       .then((response) => {
-        this.tradingData = response.data;
+        if (response.status !== 204) {
+          this.tradingData = response.data;
+        }
+
+        this.dataLoading = !this.dataLoading;
+      })
+      .catch((err) => {
+        if (err.response) {
+          // Request made and server responded
+          this.displaySnack(
+            "error",
+            "Error while getting trading data. " + err.response.data
+          );
+        } else if (err.request) {
+          // The request was made but no response was received
+          console.log(err.request);
+        } else {
+          // Something happened in setting up the request that triggered an Error
+          console.log("Error", err.message);
+        }
         this.dataLoading = !this.dataLoading;
       });
   },
