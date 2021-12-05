@@ -50,8 +50,14 @@
                       </v-col>
                       <v-col cols="12" sm="4" md="4">
                         <v-text-field
-                          v-model="editedItem.initialNumShares"
-                          label="Number Of Shares"
+                          v-model="editedItem.numSharesPerBlock"
+                          label="Shares Per Block"
+                        ></v-text-field>
+                      </v-col>
+                              <v-col cols="12" sm="4" md="4">
+                        <v-text-field
+                          v-model="editedItem.numSharesMax"
+                          label="Max Total Shares"
                         ></v-text-field>
                       </v-col>
                     </v-row>
@@ -207,14 +213,16 @@ export default {
       editedIndex: -1,
       editedItem: {
         symbol: "",
-        initialNumShares: "",
+        numSharesPerBlock: "",
+        numSharesMax: "",
         buyPercentage: "",
         sellPercentage: "",
         stopLossPercentage: "",
       },
       defaultItem: {
         symbol: "",
-        initialNumShares: "",
+        numSharesPerBlock: "",
+        numSharesMax: "",
         buyPercentage: "",
         sellPercentage: "",
         stopLossPercentage: "",
@@ -266,7 +274,8 @@ export default {
     headers() {
       return [
         { text: "Symbol", value: "symbol" },
-        { text: "Initial Num Shares", value: "initialNumShares" },
+        { text: "Shares Per Block", value: "numSharesPerBlock" },
+        { text: "Max Total Shares", value: "numSharesMax" },
         { text: "Buy Percentage", value: "buyPercentage" },
         { text: "Sell Percentage", value: "sellPercentage" },
         { text: "Stop Loss Percentage", value: "stopLossPercentage" },
@@ -354,7 +363,8 @@ export default {
           .post(process.env.VUE_APP_API_ENDPOINT_URL + "/UpdateLadder", {
             id: this.editedItem.id,
             symbol: ladderSymbol,
-            initialNumShares: this.editedItem.initialNumShares,
+            numSharesPerBlock: this.editedItem.numSharesPerBlock,
+            numSharesMax: this.editedItem.numSharesMax,
             buyPercentage: this.editedItem.buyPercentage,
             sellPercentage: this.editedItem.sellPercentage,
             stopLossPercentage: this.editedItem.stopLossPercentage,
@@ -387,7 +397,8 @@ export default {
         axios
           .post(process.env.VUE_APP_API_ENDPOINT_URL + "/CreateLadder", {
             symbol: ladderSymbol,
-            initialNumShares: this.editedItem.initialNumShares,
+            numSharesPerBlock: this.editedItem.numSharesPerBlock,
+            numSharesMax: this.editedItem.numSharesMax,
             buyPercentage: this.editedItem.buyPercentage,
             sellPercentage: this.editedItem.sellPercentage,
             stopLossPercentage: this.editedItem.stopLossPercentage,
@@ -434,7 +445,7 @@ export default {
           {
             id: item.id,
             symbol: symbol,
-            initialNumShares: item.initialNumShares,
+            numSharesPerBlock: item.numSharesPerBlock,
             buyPercentage: item.buyPercentage,
             sellPercentage: item.sellPercentage,
             stopLossPercentage: item.stopLossPercentage,
