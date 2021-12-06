@@ -256,6 +256,7 @@ export default {
             id: this.editedItem.id,
             name: this.editedItem.name,
             active: this.editedItem.active,
+            trading: this.editedItem.trading,
           })
           .then((response) => {
             this.response = response.data;

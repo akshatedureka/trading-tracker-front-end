@@ -138,9 +138,10 @@ export default {
 
       if (item.trading) {
         axios
-          .post(process.env.VUE_APP_API_ENDPOINT_URL + "/UpdateTradingStatus", {
+          .post(process.env.VUE_APP_API_ENDPOINT_URL + "/UpdateTradingSymbol", {
             id: item.symbolId,
             name: item.symbol,
+            active: item.active,
             trading: item.trading,
           })
           .then((response) => {
