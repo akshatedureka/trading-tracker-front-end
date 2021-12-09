@@ -11,7 +11,7 @@
       >
         <template v-slot:top>
           <v-toolbar flat>
-            <v-toolbar-title>Trade Management Swing</v-toolbar-title>
+            <v-toolbar-title>Trade Management</v-toolbar-title>
             <v-divider class="mx-4" inset vertical></v-divider>
             <v-spacer></v-spacer>
           </v-toolbar>
@@ -77,7 +77,7 @@ export default {
   },
   mounted() {
     axios
-      .get(process.env.VUE_APP_API_ENDPOINT_URL + "/GetTradingDataSwing")
+      .get(process.env.VUE_APP_API_ENDPOINT_URL + "/GetTradingData")
       .then((response) => {
         if (response.status !== 204) {
           this.tradingData = response.data;

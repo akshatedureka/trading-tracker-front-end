@@ -1,4 +1,4 @@
-(window["webpackJsonp"] = window["webpackJsonp"] || []).push([["account-management~block-archive~block-details~block-management~symbol-management~trade-management-d~358ee44f"],{
+(window["webpackJsonp"] = window["webpackJsonp"] || []).push([["account-management~block-archive~block-details~block-management~symbol-management~trade-management"],{
 
 /***/ "./node_modules/core-js/internals/same-value.js":
 /*!******************************************************!*\

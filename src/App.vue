@@ -49,20 +49,7 @@
             ($store.state.accountType === 1 || $store.state.accountType === 2)
           "
           color="primary"
-          to="/symbol-management-swing"
-        >
-          <v-list-item-icon>
-            <v-icon>mdi-playlist-edit</v-icon>
-          </v-list-item-icon>
-          <v-list-item-title>Symbol Management</v-list-item-title>
-        </v-list-item>
-        <v-list-item
-          v-if="
-            ($store.state.hasEnteredKeys && $store.state.accountType === 3) ||
-            $store.state.accountType === 4
-          "
-          color="primary"
-          to="/symbol-management-day"
+          to="/symbol-management"
         >
           <v-list-item-icon>
             <v-icon>mdi-playlist-edit</v-icon>
@@ -88,25 +75,12 @@
             $store.state.accountType === 2
           "
           color="primary"
-          to="/trade-management-swing"
+          to="/trade-management"
         >
           <v-list-item-icon>
             <v-icon>mdi-finance</v-icon>
           </v-list-item-icon>
-          <v-list-item-title>Trade Management - Swing</v-list-item-title>
-        </v-list-item>
-        <v-list-item
-          v-if="
-            ($store.state.hasEnteredKeys && $store.state.accountType === 3) ||
-            $store.state.accountType === 4
-          "
-          color="primary"
-          to="/trade-management-day"
-        >
-          <v-list-item-icon>
-            <v-icon>mdi-finance</v-icon>
-          </v-list-item-icon>
-          <v-list-item-title>Trade Management - Day</v-list-item-title>
+          <v-list-item-title>Trade Management</v-list-item-title>
         </v-list-item>
         <v-list-item
           v-if="$store.state.hasEnteredKeys"

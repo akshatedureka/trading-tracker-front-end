@@ -28,23 +28,12 @@ const routes = [
     }
   },
   {
-    path: '/symbol-management-swing',
-    name: 'SymbolManagementSwing',
+    path: '/symbol-management',
+    name: 'SymbolManagement',
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "symbol-management" */ '../views/SymbolManagementSwing.vue'),
-    meta: {
-      auth: true
-    }
-  },
-  {
-    path: '/symbol-management-day',
-    name: 'SymbolManagementDay',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "symbol-management" */ '../views/SymbolManagementDay.vue'),
+    component: () => import(/* webpackChunkName: "symbol-management" */ '../views/SymbolManagement.vue'),
     meta: {
       auth: true
     }
@@ -72,23 +61,12 @@ const routes = [
     }
   },
   {
-    path: '/trade-management-swing',
-    name: 'TradeManagementSwing',
+    path: '/trade-management',
+    name: 'TradeManagement',
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "trade-management-swing" */ '../views/TradeManagementSwing.vue'),
-    meta: {
-      auth: true
-    }
-  },
-  {
-    path: '/trade-management-day',
-    name: 'TradeManagementDay',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "trade-management-day" */ '../views/TradeManagementDay.vue'),
+    component: () => import(/* webpackChunkName: "trade-management" */ '../views/TradeManagement.vue'),
     meta: {
       auth: true
     }

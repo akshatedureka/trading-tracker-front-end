@@ -86,7 +86,7 @@ export default {
   },
   mounted() {
     axios
-      .get(process.env.VUE_APP_API_ENDPOINT_URL + "/GetComparisonDataSwing")
+      .get(process.env.VUE_APP_API_ENDPOINT_URL + "/GetComparisonData")
       .then((response) => {
         this.blocks = response.data;
         this.dataLoading = false;

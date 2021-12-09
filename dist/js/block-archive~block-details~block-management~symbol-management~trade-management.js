@@ -1,4 +1,4 @@
-(window["webpackJsonp"] = window["webpackJsonp"] || []).push([["block-archive~block-details~block-management~symbol-management~trade-management-day~trade-management-swing"],{
+(window["webpackJsonp"] = window["webpackJsonp"] || []).push([["block-archive~block-details~block-management~symbol-management~trade-management"],{
 
 /***/ "./node_modules/core-js/modules/es.string.search.js":
 /*!**********************************************************!*\
