@@ -3,7 +3,7 @@
     <v-app-bar color="primary" dark app>
       <v-app-bar-nav-icon @click="drawer = true"></v-app-bar-nav-icon>
       <router-link to="/" class="app-bar-link">
-        <v-toolbar-title>Trade Management System (TMS)</v-toolbar-title>
+        <v-toolbar-title>Trade Management System</v-toolbar-title>
       </router-link>
       <v-spacer></v-spacer>
       <v-chip v-if="$store.state.authenticated" class="mr-5" color="blue">

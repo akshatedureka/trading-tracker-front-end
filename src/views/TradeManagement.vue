@@ -14,6 +14,12 @@
             <v-toolbar-title>Trade Management</v-toolbar-title>
             <v-divider class="mx-4" inset vertical></v-divider>
             <v-spacer></v-spacer>
+
+            Buying Power: ${{ tradingAccountData.buyingPower }}
+            <v-spacer></v-spacer>
+            Account Value: ${{ tradingAccountData.accountValue }}
+            <v-spacer></v-spacer>
+            Today Profit/Loss: ${{ tradingAccountData.accountValue - tradingAccountData.accountValuePreviousDay}}
           </v-toolbar>
         </template>
         <template v-slot:item.symbol="{ item }">
@@ -59,6 +65,7 @@ export default {
       overlay: false,
       loading: false,
       tradingData: [],
+      tradingAccountData: "",
       response: "",
       switchTradeResponse: "",
       search: "",
@@ -76,6 +83,27 @@ export default {
     },
   },
   mounted() {
+    axios
+      .get(process.env.VUE_APP_API_ENDPOINT_URL + "/GetTradingAccountData")
+      .then((response) => {
+        this.tradingAccountData = response.data;
+      })
+      .catch((err) => {
+        if (err.response) {
+          // Request made and server responded
+          this.displaySnack(
+            "error",
+            "Error while getting trading account data. " + err.response.data
+          );
+        } else if (err.request) {
+          // The request was made but no response was received
+          console.log(err.request);
+        } else {
+          // Something happened in setting up the request that triggered an Error
+          console.log("Error", err.message);
+        }
+        this.dataLoading = !this.dataLoading;
+      });
     axios
       .get(process.env.VUE_APP_API_ENDPOINT_URL + "/GetTradingData")
       .then((response) => {
